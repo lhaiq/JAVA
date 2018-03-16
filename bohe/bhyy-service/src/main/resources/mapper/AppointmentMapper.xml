@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.AppointmentRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Appointment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
+    <result column="doctor_name" jdbcType="VARCHAR" property="doctorName" />
+    <result column="doctor_config_id" jdbcType="BIGINT" property="doctorConfigId" />
+    <result column="time_bucket" jdbcType="INTEGER" property="timeBucket" />
+    <result column="item_class_id" jdbcType="BIGINT" property="itemClassId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="customer_name" jdbcType="VARCHAR" property="customerName" />
+    <result column="patient_id" jdbcType="BIGINT" property="patientId" />
+    <result column="patient_name" jdbcType="VARCHAR" property="patientName" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="cancel_reason" jdbcType="VARCHAR" property="cancelReason" />
+    <result column="appoint_id" jdbcType="VARCHAR" property="appointId" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="hospital_id" jdbcType="BIGINT" property="hospitalId" />
+    <result column="hospital_name" jdbcType="VARCHAR" property="hospitalName" />
+    <result column="time_cost" jdbcType="INTEGER" property="timeCost" />
+    <result column="visit_plans" jdbcType="VARCHAR" property="visitPlans" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="snapshot" jdbcType="VARCHAR" property="snapshot" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, doctor_id, doctor_name, doctor_config_id, time_bucket, item_class_id, customer_id, 
+    customer_name, patient_id, patient_name, time, type, status, remark, cancel_reason, 
+    appoint_id, source, hospital_id, hospital_name, time_cost, visit_plans, create_time, 
+    snapshot, address
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from appointment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from appointment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Appointment">
+    insert into appointment (id, doctor_id, doctor_name, 
+      doctor_config_id, time_bucket, item_class_id, 
+      customer_id, customer_name, patient_id, 
+      patient_name, time, type, 
+      status, remark, cancel_reason, 
+      appoint_id, source, hospital_id, 
+      hospital_name, time_cost, visit_plans, 
+      create_time, snapshot, address
+      )
+    values (#{id,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, #{doctorName,jdbcType=VARCHAR}, 
+      #{doctorConfigId,jdbcType=BIGINT}, #{timeBucket,jdbcType=INTEGER}, #{itemClassId,jdbcType=BIGINT}, 
+      #{customerId,jdbcType=BIGINT}, #{customerName,jdbcType=VARCHAR}, #{patientId,jdbcType=BIGINT}, 
+      #{patientName,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{cancelReason,jdbcType=VARCHAR}, 
+      #{appointId,jdbcType=VARCHAR}, #{source,jdbcType=INTEGER}, #{hospitalId,jdbcType=BIGINT}, 
+      #{hospitalName,jdbcType=VARCHAR}, #{timeCost,jdbcType=INTEGER}, #{visitPlans,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{snapshot,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Appointment">
+    insert into appointment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="doctorId != null">
+        doctor_id,
+      </if>
+      <if test="doctorName != null">
+        doctor_name,
+      </if>
+      <if test="doctorConfigId != null">
+        doctor_config_id,
+      </if>
+      <if test="timeBucket != null">
+        time_bucket,
+      </if>
+      <if test="itemClassId != null">
+        item_class_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="customerName != null">
+        customer_name,
+      </if>
+      <if test="patientId != null">
+        patient_id,
+      </if>
+      <if test="patientName != null">
+        patient_name,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="cancelReason != null">
+        cancel_reason,
+      </if>
+      <if test="appointId != null">
+        appoint_id,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="hospitalId != null">
+        hospital_id,
+      </if>
+      <if test="hospitalName != null">
+        hospital_name,
+      </if>
+      <if test="timeCost != null">
+        time_cost,
+      </if>
+      <if test="visitPlans != null">
+        visit_plans,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="snapshot != null">
+        snapshot,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorName != null">
+        #{doctorName,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorConfigId != null">
+        #{doctorConfigId,jdbcType=BIGINT},
+      </if>
+      <if test="timeBucket != null">
+        #{timeBucket,jdbcType=INTEGER},
+      </if>
+      <if test="itemClassId != null">
+        #{itemClassId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null">
+        #{patientId,jdbcType=BIGINT},
+      </if>
+      <if test="patientName != null">
+        #{patientName,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null">
+        #{cancelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="appointId != null">
+        #{appointId,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalName != null">
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeCost != null">
+        #{timeCost,jdbcType=INTEGER},
+      </if>
+      <if test="visitPlans != null">
+        #{visitPlans,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="snapshot != null">
+        #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Appointment">
+    update appointment
+    <set>
+      <if test="doctorId != null">
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorName != null">
+        doctor_name = #{doctorName,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorConfigId != null">
+        doctor_config_id = #{doctorConfigId,jdbcType=BIGINT},
+      </if>
+      <if test="timeBucket != null">
+        time_bucket = #{timeBucket,jdbcType=INTEGER},
+      </if>
+      <if test="itemClassId != null">
+        item_class_id = #{itemClassId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="customerName != null">
+        customer_name = #{customerName,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null">
+        patient_id = #{patientId,jdbcType=BIGINT},
+      </if>
+      <if test="patientName != null">
+        patient_name = #{patientName,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="cancelReason != null">
+        cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+      </if>
+      <if test="appointId != null">
+        appoint_id = #{appointId,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="hospitalId != null">
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
+      </if>
+      <if test="hospitalName != null">
+        hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeCost != null">
+        time_cost = #{timeCost,jdbcType=INTEGER},
+      </if>
+      <if test="visitPlans != null">
+        visit_plans = #{visitPlans,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="snapshot != null">
+        snapshot = #{snapshot,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Appointment">
+    update appointment
+    set doctor_id = #{doctorId,jdbcType=BIGINT},
+      doctor_name = #{doctorName,jdbcType=VARCHAR},
+      doctor_config_id = #{doctorConfigId,jdbcType=BIGINT},
+      time_bucket = #{timeBucket,jdbcType=INTEGER},
+      item_class_id = #{itemClassId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      customer_name = #{customerName,jdbcType=VARCHAR},
+      patient_id = #{patientId,jdbcType=BIGINT},
+      patient_name = #{patientName,jdbcType=VARCHAR},
+      time = #{time,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      cancel_reason = #{cancelReason,jdbcType=VARCHAR},
+      appoint_id = #{appointId,jdbcType=VARCHAR},
+      source = #{source,jdbcType=INTEGER},
+      hospital_id = #{hospitalId,jdbcType=BIGINT},
+      hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      time_cost = #{timeCost,jdbcType=INTEGER},
+      visit_plans = #{visitPlans,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      snapshot = #{snapshot,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Appointment" resultType="java.lang.Integer">
+    select count(*) from appointment
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="doctorId != null">
+        and doctor_id = #{doctorId,jdbcType=BIGINT}
+      </if>
+      <if test="doctorName != null">
+        and doctor_name = #{doctorName,jdbcType=VARCHAR}
+      </if>
+      <if test="doctorConfigId != null">
+        and doctor_config_id = #{doctorConfigId,jdbcType=BIGINT}
+      </if>
+      <if test="timeBucket != null">
+        and time_bucket = #{timeBucket,jdbcType=INTEGER}
+      </if>
+      <if test="itemClassId != null">
+        and item_class_id = #{itemClassId,jdbcType=BIGINT}
+      </if>
+      <if test="customerId != null">
+        and customer_id = #{customerId,jdbcType=BIGINT}
+      </if>
+      <if test="customerName != null">
+        and customer_name = #{customerName,jdbcType=VARCHAR}
+      </if>
+      <if test="patientId != null">
+        and patient_id = #{patientId,jdbcType=BIGINT}
+      </if>
+      <if test="patientName != null">
+        and patient_name = #{patientName,jdbcType=VARCHAR}
+      </if>
+      <if test="time != null">
+        and time = #{time,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="remark != null">
+        and remark = #{remark,jdbcType=VARCHAR}
+      </if>
+      <if test="cancelReason != null">
+        and cancel_reason = #{cancelReason,jdbcType=VARCHAR}
+      </if>
+      <if test="appointId != null">
+        and appoint_id = #{appointId,jdbcType=VARCHAR}
+      </if>
+      <if test="source != null">
+        and source = #{source,jdbcType=INTEGER}
+      </if>
+      <if test="hospitalId != null">
+        and hospital_id = #{hospitalId,jdbcType=BIGINT}
+      </if>
+      <if test="hospitalName != null">
+        and hospital_name = #{hospitalName,jdbcType=VARCHAR}
+      </if>
+      <if test="timeCost != null">
+        and time_cost = #{timeCost,jdbcType=INTEGER}
+      </if>
+      <if test="visitPlans != null">
+        and visit_plans = #{visitPlans,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="snapshot != null">
+        and snapshot = #{snapshot,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from appointment where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.doctorId != null">
+      and doctor_id = #{param1.doctorId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.doctorName != null">
+      and doctor_name = #{param1.doctorName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.doctorConfigId != null">
+      and doctor_config_id = #{param1.doctorConfigId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.timeBucket != null">
+      and time_bucket = #{param1.timeBucket,jdbcType=INTEGER}
+    </if>
+    <if test="param1.itemClassId != null">
+      and item_class_id = #{param1.itemClassId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.customerId != null">
+      and customer_id = #{param1.customerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.customerName != null">
+      and customer_name = #{param1.customerName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.patientId != null">
+      and patient_id = #{param1.patientId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.patientName != null">
+      and patient_name = #{param1.patientName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.time != null">
+      and time = #{param1.time,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.type != null">
+      and type = #{param1.type,jdbcType=INTEGER}
+    </if>
+    <if test="param1.status != null">
+      and status = #{param1.status,jdbcType=INTEGER}
+    </if>
+    <if test="param1.remark != null">
+      and remark = #{param1.remark,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.cancelReason != null">
+      and cancel_reason = #{param1.cancelReason,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.appointId != null">
+      and appoint_id = #{param1.appointId,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.source != null">
+      and source = #{param1.source,jdbcType=INTEGER}
+    </if>
+    <if test="param1.hospitalId != null">
+      and hospital_id = #{param1.hospitalId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.hospitalName != null">
+      and hospital_name = #{param1.hospitalName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.timeCost != null">
+      and time_cost = #{param1.timeCost,jdbcType=INTEGER}
+    </if>
+    <if test="param1.visitPlans != null">
+      and visit_plans = #{param1.visitPlans,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.createTime != null">
+      and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.snapshot != null">
+      and snapshot = #{param1.snapshot,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.address != null">
+      and address = #{param1.address,jdbcType=VARCHAR}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.VisitRecordRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.VisitRecord">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="manager_id" jdbcType="BIGINT" property="managerId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="appoint_id" jdbcType="BIGINT" property="appointId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, customer_id, content, type, manager_id, create_time, appoint_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from visit_record
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from visit_record
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.VisitRecord">
+    insert into visit_record (id, customer_id, content, 
+      type, manager_id, create_time, 
+      appoint_id)
+    values (#{id,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, #{content,jdbcType=VARCHAR}, 
+      #{type,jdbcType=INTEGER}, #{managerId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{appointId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.VisitRecord">
+    insert into visit_record
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="managerId != null">
+        manager_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="appointId != null">
+        appoint_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null">
+        #{managerId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointId != null">
+        #{appointId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.VisitRecord">
+    update visit_record
+    <set>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null">
+        manager_id = #{managerId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="appointId != null">
+        appoint_id = #{appointId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.VisitRecord">
+    update visit_record
+    set customer_id = #{customerId,jdbcType=BIGINT},
+      content = #{content,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      manager_id = #{managerId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      appoint_id = #{appointId,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.VisitRecord" resultType="java.lang.Integer">
+    select count(*) from visit_record
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="customerId != null">
+        and customer_id = #{customerId,jdbcType=BIGINT}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="managerId != null">
+        and manager_id = #{managerId,jdbcType=BIGINT}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="appointId != null">
+        and appoint_id = #{appointId,jdbcType=BIGINT}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from visit_record where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.customerId != null">
+      and customer_id = #{param1.customerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.content != null">
+      and content = #{param1.content,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.type != null">
+      and type = #{param1.type,jdbcType=INTEGER}
+    </if>
+    <if test="param1.managerId != null">
+      and manager_id = #{param1.managerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.createTime != null">
+      and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.appointId != null">
+      and appoint_id = #{param1.appointId,jdbcType=BIGINT}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.ImageRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Image">
+    <id column="ID" jdbcType="BIGINT" property="id" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="extension" jdbcType="VARCHAR" property="extension" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    ID, file_name, path, extension, type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from image
+    where ID = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from image
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Image">
+    insert into image (ID, file_name, path, 
+      extension, type)
+    values (#{id,jdbcType=BIGINT}, #{fileName,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{extension,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Image" useGeneratedKeys="true" keyProperty="id">
+    insert into image
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        ID,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="extension != null">
+        extension,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="extension != null">
+        #{extension,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Image">
+    update image
+    <set>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="extension != null">
+        extension = #{extension,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Image">
+    update image
+    set file_name = #{fileName,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      extension = #{extension,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Image" resultType="java.lang.Integer">
+    select count(*) from image
+    <where>
+      <if test="id != null">
+        and ID = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="fileName != null">
+        and file_name = #{fileName,jdbcType=VARCHAR}
+      </if>
+      <if test="path != null">
+        and path = #{path,jdbcType=VARCHAR}
+      </if>
+      <if test="extension != null">
+        and extension = #{extension,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and type = #{type,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from image where 1 = 1 
+    <if test="param1.id != null">
+      and ID = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.fileName != null">
+      and file_name = #{param1.fileName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.path != null">
+      and path = #{param1.path,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.extension != null">
+      and extension = #{param1.extension,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.type != null">
+      and type = #{param1.type,jdbcType=VARCHAR}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

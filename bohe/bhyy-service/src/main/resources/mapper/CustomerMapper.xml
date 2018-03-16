@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.CustomerRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Customer">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="appoint_num" jdbcType="INTEGER" property="appointNum" />
+    <result column="treat_num" jdbcType="INTEGER" property="treatNum" />
+    <result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+    <result column="org" jdbcType="VARCHAR" property="org" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="relation" jdbcType="INTEGER" property="relation" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, nick_name, real_name, gender, phone, birthday, age, source, create_time, icon,
+    appoint_num, treat_num, pay_money, org, type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Customer">
+    insert into customer (id, nick_name, real_name,
+    gender, phone, birthday,
+    age, source, create_time,
+    icon, appoint_num, treat_num,
+    pay_money, org, type
+    )
+    values (#{id,jdbcType=BIGINT}, #{nickName,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+    #{gender,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
+    #{age,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+    #{icon,jdbcType=VARCHAR}, #{appointNum,jdbcType=INTEGER}, #{treatNum,jdbcType=INTEGER},
+    #{payMoney,jdbcType=DECIMAL}, #{org,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}
+    )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Customer" keyProperty="id" useGeneratedKeys="true">
+    insert into customer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="nickName != null">
+        nick_name,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="appointNum != null">
+        appoint_num,
+      </if>
+      <if test="treatNum != null">
+        treat_num,
+      </if>
+      <if test="payMoney != null">
+        pay_money,
+      </if>
+      <if test="org != null">
+        org,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="nickName != null">
+        #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="appointNum != null">
+        #{appointNum,jdbcType=INTEGER},
+      </if>
+      <if test="treatNum != null">
+        #{treatNum,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null">
+        #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="org != null">
+        #{org,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Customer">
+    update customer
+    <set>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="appointNum != null">
+        appoint_num = #{appointNum,jdbcType=INTEGER},
+      </if>
+      <if test="treatNum != null">
+        treat_num = #{treatNum,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null">
+        pay_money = #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="org != null">
+        org = #{org,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Customer">
+    update customer
+    set nick_name = #{nickName,jdbcType=VARCHAR},
+    real_name = #{realName,jdbcType=VARCHAR},
+    gender = #{gender,jdbcType=INTEGER},
+    phone = #{phone,jdbcType=VARCHAR},
+    birthday = #{birthday,jdbcType=DATE},
+    age = #{age,jdbcType=INTEGER},
+    source = #{source,jdbcType=INTEGER},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    icon = #{icon,jdbcType=VARCHAR},
+    appoint_num = #{appointNum,jdbcType=INTEGER},
+    treat_num = #{treatNum,jdbcType=INTEGER},
+    pay_money = #{payMoney,jdbcType=DECIMAL},
+    org = #{org,jdbcType=VARCHAR},
+    type = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Customer" resultType="java.lang.Integer">
+    select count(*) from customer
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="nickName != null">
+        and nick_name = #{nickName,jdbcType=VARCHAR}
+      </if>
+      <if test="realName != null">
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="gender != null">
+        and gender = #{gender,jdbcType=INTEGER}
+      </if>
+      <if test="phone != null">
+        and phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="birthday != null">
+        and birthday = #{birthday,jdbcType=DATE}
+      </if>
+      <if test="age != null">
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="source != null">
+        and source = #{source,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="icon != null">
+        and icon = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="appointNum != null">
+        and appoint_num = #{appointNum,jdbcType=INTEGER}
+      </if>
+      <if test="treatNum != null">
+        and treat_num = #{treatNum,jdbcType=INTEGER}
+      </if>
+      <if test="payMoney != null">
+        and pay_money = #{payMoney,jdbcType=DECIMAL}
+      </if>
+      <if test="org != null">
+        and org = #{org,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+        and type = #{type,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from customer where 1 = 1
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.nickName != null">
+      and nick_name = #{param1.nickName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.realName != null">
+      and real_name = #{param1.realName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.gender != null">
+      and gender = #{param1.gender,jdbcType=INTEGER}
+    </if>
+    <if test="param1.phone != null">
+      and phone = #{param1.phone,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.birthday != null">
+      and birthday = #{param1.birthday,jdbcType=DATE}
+    </if>
+    <if test="param1.age != null">
+      and age = #{param1.age,jdbcType=INTEGER}
+    </if>
+    <if test="param1.source != null">
+      and source = #{param1.source,jdbcType=INTEGER}
+    </if>
+    <if test="param1.createTime != null">
+      and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.icon != null">
+      and icon = #{param1.icon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.appointNum != null">
+      and appoint_num = #{param1.appointNum,jdbcType=INTEGER}
+    </if>
+    <if test="param1.treatNum != null">
+      and treat_num = #{param1.treatNum,jdbcType=INTEGER}
+    </if>
+    <if test="param1.payMoney != null">
+      and pay_money = #{param1.payMoney,jdbcType=DECIMAL}
+    </if>
+    <if test="param1.org != null">
+      and org = #{param1.org,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.type != null">
+      and type = #{param1.type,jdbcType=INTEGER}
+    </if>
+    <if test="param2.sort != null">
+      order by
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+
+  <select id="selectRelation" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    SELECT c.*,cr.relation from customer_relation cr
+    JOIN customer c on cr.b_customer_id=c.id
+    and cr.a_customer_id=#{id,jdbcType=BIGINT}
+  </select>
+</mapper>

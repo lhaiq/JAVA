@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.DoctorVisitPlanRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="config_id" jdbcType="BIGINT" property="configId" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="time_range" jdbcType="INTEGER" property="timeRange" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, config_id, time, time_range, status, date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from doctor_visit_plan
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from doctor_visit_plan
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+
+  <delete id="deleteSelective" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    DELETE FROM doctor_visit_plan
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="configId != null">
+        and config_id = #{configId,jdbcType=BIGINT}
+      </if>
+      <if test="time != null">
+        and time = #{time,jdbcType=VARCHAR}
+      </if>
+      <if test="timeRange != null">
+        and time_range = #{timeRange,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="date != null">
+        and date = #{date,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </delete>
+
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    insert into doctor_visit_plan (id, config_id, time, 
+      time_range, status, date
+      )
+    values (#{id,jdbcType=BIGINT}, #{configId,jdbcType=BIGINT}, #{time,jdbcType=VARCHAR}, 
+      #{timeRange,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{date,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    insert into doctor_visit_plan
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="configId != null">
+        config_id,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="timeRange != null">
+        time_range,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="date != null">
+        date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="configId != null">
+        #{configId,jdbcType=BIGINT},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="timeRange != null">
+        #{timeRange,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        #{date,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    update doctor_visit_plan
+    <set>
+      <if test="configId != null">
+        config_id = #{configId,jdbcType=BIGINT},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="timeRange != null">
+        time_range = #{timeRange,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan">
+    update doctor_visit_plan
+    set config_id = #{configId,jdbcType=BIGINT},
+      time = #{time,jdbcType=VARCHAR},
+      time_range = #{timeRange,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      date = #{date,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.DoctorVisitPlan" resultType="java.lang.Integer">
+    select count(*) from doctor_visit_plan
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="configId != null">
+        and config_id = #{configId,jdbcType=BIGINT}
+      </if>
+      <if test="time != null">
+        and time = #{time,jdbcType=VARCHAR}
+      </if>
+      <if test="timeRange != null">
+        and time_range = #{timeRange,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="date != null">
+        and date = #{date,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from doctor_visit_plan where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.configId != null">
+      and config_id = #{param1.configId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.time != null">
+      and time = #{param1.time,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.timeRange != null">
+      and time_range = #{param1.timeRange,jdbcType=INTEGER}
+    </if>
+    <if test="param1.status != null">
+      and status = #{param1.status,jdbcType=INTEGER}
+    </if>
+    <if test="param1.date != null">
+      and date = #{param1.date,jdbcType=VARCHAR}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

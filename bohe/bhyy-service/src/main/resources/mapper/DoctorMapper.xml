@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.DoctorRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Doctor">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="gender" jdbcType="INTEGER" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="hospital_name" jdbcType="VARCHAR" property="hospitalName" />
+    <result column="department" jdbcType="VARCHAR" property="department" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="adept" jdbcType="VARCHAR" property="adept" />
+    <result column="education" jdbcType="VARCHAR" property="education" />
+    <result column="work_year" jdbcType="INTEGER" property="workYear" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="balance" jdbcType="DECIMAL" property="balance" />
+    <result column="id_icon" jdbcType="VARCHAR" property="idIcon" />
+    <result column="job_icon1" jdbcType="VARCHAR" property="jobIcon1" />
+    <result column="job_icon2" jdbcType="VARCHAR" property="jobIcon2" />
+    <result column="assistant_qr" jdbcType="VARCHAR" property="assistantQr" />
+    <result column="add_date" jdbcType="DATE" property="addDate" />
+    <result column="doctor_icon" jdbcType="VARCHAR" property="doctorIcon" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="service_item" jdbcType="VARCHAR" property="serviceItem" />
+    <result column="is_show" jdbcType="INTEGER" property="isShow" />
+    <result column="source" jdbcType="INTEGER" property="source" />
+    <result column="failure_reason" jdbcType="VARCHAR" property="failureReason" />
+    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
+    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
+    <result column="recommend_id" jdbcType="BIGINT" property="recommendId" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="failure_time" jdbcType="TIMESTAMP" property="failureTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, real_name, phone, icon, gender, birthday, hospital_name, department, title, adept, 
+    education, work_year, intro, balance, id_icon, job_icon1, job_icon2, assistant_qr, 
+    add_date, doctor_icon, status, age, service_item, is_show, source, failure_reason, 
+    is_recommend, invite_code, recommend_id, rank, failure_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from doctor
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from doctor
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Doctor">
+    insert into doctor (id, real_name, phone, 
+      icon, gender, birthday, 
+      hospital_name, department, title, 
+      adept, education, work_year, 
+      intro, balance, id_icon, 
+      job_icon1, job_icon2, assistant_qr, 
+      add_date, doctor_icon, status, 
+      age, service_item, is_show, 
+      source, failure_reason, is_recommend, 
+      invite_code, recommend_id, rank, 
+      failure_time)
+    values (#{id,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, 
+      #{hospitalName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{adept,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{workYear,jdbcType=INTEGER}, 
+      #{intro,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{idIcon,jdbcType=VARCHAR}, 
+      #{jobIcon1,jdbcType=VARCHAR}, #{jobIcon2,jdbcType=VARCHAR}, #{assistantQr,jdbcType=VARCHAR}, 
+      #{addDate,jdbcType=DATE}, #{doctorIcon,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{age,jdbcType=INTEGER}, #{serviceItem,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, 
+      #{source,jdbcType=INTEGER}, #{failureReason,jdbcType=VARCHAR}, #{isRecommend,jdbcType=INTEGER}, 
+      #{inviteCode,jdbcType=VARCHAR}, #{recommendId,jdbcType=BIGINT}, #{rank,jdbcType=INTEGER}, 
+      #{failureTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Doctor" keyProperty="id" useGeneratedKeys="true">
+    insert into doctor
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="hospitalName != null">
+        hospital_name,
+      </if>
+      <if test="department != null">
+        department,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="adept != null">
+        adept,
+      </if>
+      <if test="education != null">
+        education,
+      </if>
+      <if test="workYear != null">
+        work_year,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="balance != null">
+        balance,
+      </if>
+      <if test="idIcon != null">
+        id_icon,
+      </if>
+      <if test="jobIcon1 != null">
+        job_icon1,
+      </if>
+      <if test="jobIcon2 != null">
+        job_icon2,
+      </if>
+      <if test="assistantQr != null">
+        assistant_qr,
+      </if>
+      <if test="addDate != null">
+        add_date,
+      </if>
+      <if test="doctorIcon != null">
+        doctor_icon,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+      <if test="serviceItem != null">
+        service_item,
+      </if>
+      <if test="isShow != null">
+        is_show,
+      </if>
+      <if test="source != null">
+        source,
+      </if>
+      <if test="failureReason != null">
+        failure_reason,
+      </if>
+      <if test="isRecommend != null">
+        is_recommend,
+      </if>
+      <if test="inviteCode != null">
+        invite_code,
+      </if>
+      <if test="recommendId != null">
+        recommend_id,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="failureTime != null">
+        failure_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="hospitalName != null">
+        #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="adept != null">
+        #{adept,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="workYear != null">
+        #{workYear,jdbcType=INTEGER},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="idIcon != null">
+        #{idIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIcon1 != null">
+        #{jobIcon1,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIcon2 != null">
+        #{jobIcon2,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantQr != null">
+        #{assistantQr,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null">
+        #{addDate,jdbcType=DATE},
+      </if>
+      <if test="doctorIcon != null">
+        #{doctorIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="serviceItem != null">
+        #{serviceItem,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="failureReason != null">
+        #{failureReason,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null">
+        #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null">
+        #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendId != null">
+        #{recommendId,jdbcType=BIGINT},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="failureTime != null">
+        #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Doctor">
+    update doctor
+    <set>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=INTEGER},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="hospitalName != null">
+        hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      </if>
+      <if test="department != null">
+        department = #{department,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="adept != null">
+        adept = #{adept,jdbcType=VARCHAR},
+      </if>
+      <if test="education != null">
+        education = #{education,jdbcType=VARCHAR},
+      </if>
+      <if test="workYear != null">
+        work_year = #{workYear,jdbcType=INTEGER},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="balance != null">
+        balance = #{balance,jdbcType=DECIMAL},
+      </if>
+      <if test="idIcon != null">
+        id_icon = #{idIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIcon1 != null">
+        job_icon1 = #{jobIcon1,jdbcType=VARCHAR},
+      </if>
+      <if test="jobIcon2 != null">
+        job_icon2 = #{jobIcon2,jdbcType=VARCHAR},
+      </if>
+      <if test="assistantQr != null">
+        assistant_qr = #{assistantQr,jdbcType=VARCHAR},
+      </if>
+      <if test="addDate != null">
+        add_date = #{addDate,jdbcType=DATE},
+      </if>
+      <if test="doctorIcon != null">
+        doctor_icon = #{doctorIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="serviceItem != null">
+        service_item = #{serviceItem,jdbcType=VARCHAR},
+      </if>
+      <if test="isShow != null">
+        is_show = #{isShow,jdbcType=INTEGER},
+      </if>
+      <if test="source != null">
+        source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="failureReason != null">
+        failure_reason = #{failureReason,jdbcType=VARCHAR},
+      </if>
+      <if test="isRecommend != null">
+        is_recommend = #{isRecommend,jdbcType=INTEGER},
+      </if>
+      <if test="inviteCode != null">
+        invite_code = #{inviteCode,jdbcType=VARCHAR},
+      </if>
+      <if test="recommendId != null">
+        recommend_id = #{recommendId,jdbcType=BIGINT},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="failureTime != null">
+        failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Doctor">
+    update doctor
+    set real_name = #{realName,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=INTEGER},
+      birthday = #{birthday,jdbcType=DATE},
+      hospital_name = #{hospitalName,jdbcType=VARCHAR},
+      department = #{department,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      adept = #{adept,jdbcType=VARCHAR},
+      education = #{education,jdbcType=VARCHAR},
+      work_year = #{workYear,jdbcType=INTEGER},
+      intro = #{intro,jdbcType=VARCHAR},
+      balance = #{balance,jdbcType=DECIMAL},
+      id_icon = #{idIcon,jdbcType=VARCHAR},
+      job_icon1 = #{jobIcon1,jdbcType=VARCHAR},
+      job_icon2 = #{jobIcon2,jdbcType=VARCHAR},
+      assistant_qr = #{assistantQr,jdbcType=VARCHAR},
+      add_date = #{addDate,jdbcType=DATE},
+      doctor_icon = #{doctorIcon,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      age = #{age,jdbcType=INTEGER},
+      service_item = #{serviceItem,jdbcType=VARCHAR},
+      is_show = #{isShow,jdbcType=INTEGER},
+      source = #{source,jdbcType=INTEGER},
+      failure_reason = #{failureReason,jdbcType=VARCHAR},
+      is_recommend = #{isRecommend,jdbcType=INTEGER},
+      invite_code = #{inviteCode,jdbcType=VARCHAR},
+      recommend_id = #{recommendId,jdbcType=BIGINT},
+      rank = #{rank,jdbcType=INTEGER},
+      failure_time = #{failureTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Doctor" resultType="java.lang.Integer">
+    select count(*) from doctor
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="realName != null">
+        and real_name = #{realName,jdbcType=VARCHAR}
+      </if>
+      <if test="phone != null">
+        and phone = #{phone,jdbcType=VARCHAR}
+      </if>
+      <if test="icon != null">
+        and icon = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="gender != null">
+        and gender = #{gender,jdbcType=INTEGER}
+      </if>
+      <if test="birthday != null">
+        and birthday = #{birthday,jdbcType=DATE}
+      </if>
+      <if test="hospitalName != null">
+        and hospital_name = #{hospitalName,jdbcType=VARCHAR}
+      </if>
+      <if test="department != null">
+        and department = #{department,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+        and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="adept != null">
+        and adept = #{adept,jdbcType=VARCHAR}
+      </if>
+      <if test="education != null">
+        and education = #{education,jdbcType=VARCHAR}
+      </if>
+      <if test="workYear != null">
+        and work_year = #{workYear,jdbcType=INTEGER}
+      </if>
+      <if test="intro != null">
+        and intro = #{intro,jdbcType=VARCHAR}
+      </if>
+      <if test="balance != null">
+        and balance = #{balance,jdbcType=DECIMAL}
+      </if>
+      <if test="idIcon != null">
+        and id_icon = #{idIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="jobIcon1 != null">
+        and job_icon1 = #{jobIcon1,jdbcType=VARCHAR}
+      </if>
+      <if test="jobIcon2 != null">
+        and job_icon2 = #{jobIcon2,jdbcType=VARCHAR}
+      </if>
+      <if test="assistantQr != null">
+        and assistant_qr = #{assistantQr,jdbcType=VARCHAR}
+      </if>
+      <if test="addDate != null">
+        and add_date = #{addDate,jdbcType=DATE}
+      </if>
+      <if test="doctorIcon != null">
+        and doctor_icon = #{doctorIcon,jdbcType=VARCHAR}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="age != null">
+        and age = #{age,jdbcType=INTEGER}
+      </if>
+      <if test="serviceItem != null">
+        and service_item = #{serviceItem,jdbcType=VARCHAR}
+      </if>
+      <if test="isShow != null">
+        and is_show = #{isShow,jdbcType=INTEGER}
+      </if>
+      <if test="source != null">
+        and source = #{source,jdbcType=INTEGER}
+      </if>
+      <if test="failureReason != null">
+        and failure_reason = #{failureReason,jdbcType=VARCHAR}
+      </if>
+      <if test="isRecommend != null">
+        and is_recommend = #{isRecommend,jdbcType=INTEGER}
+      </if>
+      <if test="inviteCode != null">
+        and invite_code = #{inviteCode,jdbcType=VARCHAR}
+      </if>
+      <if test="recommendId != null">
+        and recommend_id = #{recommendId,jdbcType=BIGINT}
+      </if>
+      <if test="rank != null">
+        and rank = #{rank,jdbcType=INTEGER}
+      </if>
+      <if test="failureTime != null">
+        and failure_time = #{failureTime,jdbcType=TIMESTAMP}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from doctor where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.realName != null">
+      and real_name = #{param1.realName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.phone != null">
+      and phone = #{param1.phone,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.icon != null">
+      and icon = #{param1.icon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.gender != null">
+      and gender = #{param1.gender,jdbcType=INTEGER}
+    </if>
+    <if test="param1.birthday != null">
+      and birthday = #{param1.birthday,jdbcType=DATE}
+    </if>
+    <if test="param1.hospitalName != null">
+      and hospital_name = #{param1.hospitalName,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.department != null">
+      and department = #{param1.department,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.title != null">
+      and title = #{param1.title,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.adept != null">
+      and adept = #{param1.adept,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.education != null">
+      and education = #{param1.education,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.workYear != null">
+      and work_year = #{param1.workYear,jdbcType=INTEGER}
+    </if>
+    <if test="param1.intro != null">
+      and intro = #{param1.intro,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.balance != null">
+      and balance = #{param1.balance,jdbcType=DECIMAL}
+    </if>
+    <if test="param1.idIcon != null">
+      and id_icon = #{param1.idIcon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.jobIcon1 != null">
+      and job_icon1 = #{param1.jobIcon1,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.jobIcon2 != null">
+      and job_icon2 = #{param1.jobIcon2,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.assistantQr != null">
+      and assistant_qr = #{param1.assistantQr,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.addDate != null">
+      and add_date = #{param1.addDate,jdbcType=DATE}
+    </if>
+    <if test="param1.doctorIcon != null">
+      and doctor_icon = #{param1.doctorIcon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.status != null">
+      and status = #{param1.status,jdbcType=INTEGER}
+    </if>
+    <if test="param1.age != null">
+      and age = #{param1.age,jdbcType=INTEGER}
+    </if>
+    <if test="param1.serviceItem != null">
+      and service_item = #{param1.serviceItem,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.isShow != null">
+      and is_show = #{param1.isShow,jdbcType=INTEGER}
+    </if>
+    <if test="param1.source != null">
+      and source = #{param1.source,jdbcType=INTEGER}
+    </if>
+    <if test="param1.failureReason != null">
+      and failure_reason = #{param1.failureReason,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.isRecommend != null">
+      and is_recommend = #{param1.isRecommend,jdbcType=INTEGER}
+    </if>
+    <if test="param1.inviteCode != null">
+      and invite_code = #{param1.inviteCode,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.recommendId != null">
+      and recommend_id = #{param1.recommendId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.rank != null">
+      and rank = #{param1.rank,jdbcType=INTEGER}
+    </if>
+    <if test="param1.failureTime != null">
+      and failure_time = #{param1.failureTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

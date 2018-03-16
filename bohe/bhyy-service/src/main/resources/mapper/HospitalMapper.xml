@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.HospitalRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Hospital">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="prov" jdbcType="INTEGER" property="prov" />
+    <result column="city" jdbcType="INTEGER" property="city" />
+    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="route" jdbcType="VARCHAR" property="route" />
+    <result column="tooth_chair_num" jdbcType="INTEGER" property="toothChairNum" />
+    <result column="leader" jdbcType="VARCHAR" property="leader" />
+    <result column="leader_phone" jdbcType="VARCHAR" property="leaderPhone" />
+    <result column="bohe_join" jdbcType="VARCHAR" property="boheJoin" />
+    <result column="establish_date" jdbcType="DATE" property="establishDate" />
+    <result column="staff_num" jdbcType="INTEGER" property="staffNum" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="hos_qualificat" jdbcType="VARCHAR" property="hosQualificat" />
+    <result column="eia_qualificat" jdbcType="VARCHAR" property="eiaQualificat" />
+    <result column="account" jdbcType="VARCHAR" property="account" />
+    <result column="is_enable" jdbcType="INTEGER" property="isEnable" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, name, brand, prov, city, area, telephone, address, route, tooth_chair_num, leader, 
+    leader_phone, bohe_join, establish_date, staff_num, password, hos_qualificat, eia_qualificat, 
+    account, is_enable, create_time, rank
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hospital
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from hospital
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Hospital">
+    insert into hospital (id, name, brand, 
+      prov, city, area, telephone, 
+      address, route, tooth_chair_num, 
+      leader, leader_phone, bohe_join, 
+      establish_date, staff_num, password, 
+      hos_qualificat, eia_qualificat, account, 
+      is_enable, create_time, rank
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, 
+      #{prov,jdbcType=INTEGER}, #{city,jdbcType=INTEGER}, #{area,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{route,jdbcType=VARCHAR}, #{toothChairNum,jdbcType=INTEGER}, 
+      #{leader,jdbcType=VARCHAR}, #{leaderPhone,jdbcType=VARCHAR}, #{boheJoin,jdbcType=VARCHAR},
+      #{establishDate,jdbcType=DATE}, #{staffNum,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, 
+      #{hosQualificat,jdbcType=VARCHAR}, #{eiaQualificat,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{isEnable,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{rank,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Hospital">
+    insert into hospital
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="prov != null">
+        prov,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="telephone != null">
+        telephone,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="route != null">
+        route,
+      </if>
+      <if test="toothChairNum != null">
+        tooth_chair_num,
+      </if>
+      <if test="leader != null">
+        leader,
+      </if>
+      <if test="leaderPhone != null">
+        leader_phone,
+      </if>
+      <if test="boheJoin != null">
+        bohe_join,
+      </if>
+      <if test="establishDate != null">
+        establish_date,
+      </if>
+      <if test="staffNum != null">
+        staff_num,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="hosQualificat != null">
+        hos_qualificat,
+      </if>
+      <if test="eiaQualificat != null">
+        eia_qualificat,
+      </if>
+      <if test="account != null">
+        account,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="prov != null">
+        #{prov,jdbcType=INTEGER},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=INTEGER},
+      </if>
+      <if test="telephone != null">
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null">
+        #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="toothChairNum != null">
+        #{toothChairNum,jdbcType=INTEGER},
+      </if>
+      <if test="leader != null">
+        #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderPhone != null">
+        #{leaderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="boheJoin != null">
+        #{boheJoin,jdbcType=VARCHAR},
+      </if>
+      <if test="establishDate != null">
+        #{establishDate,jdbcType=DATE},
+      </if>
+      <if test="staffNum != null">
+        #{staffNum,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="hosQualificat != null">
+        #{hosQualificat,jdbcType=VARCHAR},
+      </if>
+      <if test="eiaQualificat != null">
+        #{eiaQualificat,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Hospital">
+    update hospital
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="prov != null">
+        prov = #{prov,jdbcType=INTEGER},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=INTEGER},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=INTEGER},
+      </if>
+      <if test="telephone != null">
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="route != null">
+        route = #{route,jdbcType=VARCHAR},
+      </if>
+      <if test="toothChairNum != null">
+        tooth_chair_num = #{toothChairNum,jdbcType=INTEGER},
+      </if>
+      <if test="leader != null">
+        leader = #{leader,jdbcType=VARCHAR},
+      </if>
+      <if test="leaderPhone != null">
+        leader_phone = #{leaderPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="boheJoin != null">
+        bohe_join = #{boheJoin,jdbcType=VARCHAR},
+      </if>
+      <if test="establishDate != null">
+        establish_date = #{establishDate,jdbcType=DATE},
+      </if>
+      <if test="staffNum != null">
+        staff_num = #{staffNum,jdbcType=INTEGER},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="hosQualificat != null">
+        hos_qualificat = #{hosQualificat,jdbcType=VARCHAR},
+      </if>
+      <if test="eiaQualificat != null">
+        eia_qualificat = #{eiaQualificat,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Hospital">
+    update hospital
+    set name = #{name,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=VARCHAR},
+      prov = #{prov,jdbcType=INTEGER},
+      city = #{city,jdbcType=INTEGER},
+      area = #{area,jdbcType=INTEGER},
+      telephone = #{telephone,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      route = #{route,jdbcType=VARCHAR},
+      tooth_chair_num = #{toothChairNum,jdbcType=INTEGER},
+      leader = #{leader,jdbcType=VARCHAR},
+      leader_phone = #{leaderPhone,jdbcType=VARCHAR},
+      bohe_join = #{boheJoin,jdbcType=VARCHAR},
+      establish_date = #{establishDate,jdbcType=DATE},
+      staff_num = #{staffNum,jdbcType=INTEGER},
+      password = #{password,jdbcType=VARCHAR},
+      hos_qualificat = #{hosQualificat,jdbcType=VARCHAR},
+      eia_qualificat = #{eiaQualificat,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      is_enable = #{isEnable,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      rank = #{rank,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Hospital" resultType="java.lang.Integer">
+    select count(*) from hospital
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="brand != null">
+        and brand = #{brand,jdbcType=VARCHAR}
+      </if>
+      <if test="prov != null">
+        and prov = #{prov,jdbcType=INTEGER}
+      </if>
+      <if test="city != null">
+        and city = #{city,jdbcType=INTEGER}
+      </if>
+      <if test="area != null">
+        and area = #{area,jdbcType=INTEGER}
+      </if>
+      <if test="telephone != null">
+        and telephone = #{telephone,jdbcType=VARCHAR}
+      </if>
+      <if test="address != null">
+        and address = #{address,jdbcType=VARCHAR}
+      </if>
+      <if test="route != null">
+        and route = #{route,jdbcType=VARCHAR}
+      </if>
+      <if test="toothChairNum != null">
+        and tooth_chair_num = #{toothChairNum,jdbcType=INTEGER}
+      </if>
+      <if test="leader != null">
+        and leader = #{leader,jdbcType=VARCHAR}
+      </if>
+      <if test="leaderPhone != null">
+        and leader_phone = #{leaderPhone,jdbcType=VARCHAR}
+      </if>
+      <if test="boheJoin != null">
+        and bohe_join = #{boheJoin,jdbcType=VARCHAR}
+      </if>
+      <if test="establishDate != null">
+        and establish_date = #{establishDate,jdbcType=DATE}
+      </if>
+      <if test="staffNum != null">
+        and staff_num = #{staffNum,jdbcType=INTEGER}
+      </if>
+      <if test="password != null">
+        and password = #{password,jdbcType=VARCHAR}
+      </if>
+      <if test="hosQualificat != null">
+        and hos_qualificat = #{hosQualificat,jdbcType=VARCHAR}
+      </if>
+      <if test="eiaQualificat != null">
+        and eia_qualificat = #{eiaQualificat,jdbcType=VARCHAR}
+      </if>
+      <if test="account != null">
+        and account = #{account,jdbcType=VARCHAR}
+      </if>
+      <if test="isEnable != null">
+        and is_enable = #{isEnable,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="rank != null">
+        and rank = #{rank,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hospital where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.name != null">
+      and name = #{param1.name,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.brand != null">
+      and brand = #{param1.brand,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.prov != null">
+      and prov = #{param1.prov,jdbcType=INTEGER}
+    </if>
+    <if test="param1.city != null">
+      and city = #{param1.city,jdbcType=INTEGER}
+    </if>
+    <if test="param1.area != null">
+      and area = #{param1.area,jdbcType=INTEGER}
+    </if>
+    <if test="param1.telephone != null">
+      and telephone = #{param1.telephone,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.address != null">
+      and address = #{param1.address,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.route != null">
+      and route = #{param1.route,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.toothChairNum != null">
+      and tooth_chair_num = #{param1.toothChairNum,jdbcType=INTEGER}
+    </if>
+    <if test="param1.leader != null">
+      and leader = #{param1.leader,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.leaderPhone != null">
+      and leader_phone = #{param1.leaderPhone,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.boheJoin != null">
+      and bohe_join = #{param1.boheJoin,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.establishDate != null">
+      and establish_date = #{param1.establishDate,jdbcType=DATE}
+    </if>
+    <if test="param1.staffNum != null">
+      and staff_num = #{param1.staffNum,jdbcType=INTEGER}
+    </if>
+    <if test="param1.password != null">
+      and password = #{param1.password,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.hosQualificat != null">
+      and hos_qualificat = #{param1.hosQualificat,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.eiaQualificat != null">
+      and eia_qualificat = #{param1.eiaQualificat,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.account != null">
+      and account = #{param1.account,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.isEnable != null">
+      and is_enable = #{param1.isEnable,jdbcType=INTEGER}
+    </if>
+    <if test="param1.createTime != null">
+      and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.rank != null">
+      and rank = #{param1.rank,jdbcType=INTEGER}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.ItemClassRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.ItemClass">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="CLASS_NAME" jdbcType="VARCHAR" property="className" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="TYPE" jdbcType="INTEGER" property="type" />
+    <result column="STATUS" jdbcType="INTEGER" property="status" />
+    <result column="RANK" jdbcType="INTEGER" property="rank" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, CLASS_NAME, CREATE_TIME, TYPE, STATUS, RANK
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_class
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item_class
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.ItemClass">
+    insert into item_class (id, CLASS_NAME, CREATE_TIME, 
+      TYPE, STATUS, RANK)
+    values (#{id,jdbcType=BIGINT}, #{className,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{rank,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.ItemClass">
+    insert into item_class
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="className != null">
+        CLASS_NAME,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="type != null">
+        TYPE,
+      </if>
+      <if test="status != null">
+        STATUS,
+      </if>
+      <if test="rank != null">
+        RANK,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="className != null">
+        #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.ItemClass">
+    update item_class
+    <set>
+      <if test="className != null">
+        CLASS_NAME = #{className,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null">
+        TYPE = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="rank != null">
+        RANK = #{rank,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.ItemClass">
+    update item_class
+    set CLASS_NAME = #{className,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
+      TYPE = #{type,jdbcType=INTEGER},
+      STATUS = #{status,jdbcType=INTEGER},
+      RANK = #{rank,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.ItemClass" resultType="java.lang.Integer">
+    select count(*) from item_class
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="className != null">
+        and CLASS_NAME = #{className,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+        and CREATE_TIME = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="type != null">
+        and TYPE = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and STATUS = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="rank != null">
+        and RANK = #{rank,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item_class where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.className != null">
+      and CLASS_NAME = #{param1.className,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.createTime != null">
+      and CREATE_TIME = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.type != null">
+      and TYPE = #{param1.type,jdbcType=INTEGER}
+    </if>
+    <if test="param1.status != null">
+      and STATUS = #{param1.status,jdbcType=INTEGER}
+    </if>
+    <if test="param1.rank != null">
+      and RANK = #{param1.rank,jdbcType=INTEGER}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

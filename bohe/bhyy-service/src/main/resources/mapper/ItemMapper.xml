@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.ItemRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.Item">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="doctor_class" jdbcType="VARCHAR" property="doctorClass" />
+    <result column="patient_class" jdbcType="VARCHAR" property="patientClass" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="intro" jdbcType="VARCHAR" property="intro" />
+    <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="link_title" jdbcType="VARCHAR" property="linkTitle" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, icon, unit, price, doctor_class, patient_class, link, intro, rank, name, link_title
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from item
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.Item">
+    insert into item (id, icon, unit, 
+      price, doctor_class, patient_class, 
+      link, intro, rank, 
+      name, link_title)
+    values (#{id,jdbcType=BIGINT}, #{icon,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{doctorClass,jdbcType=VARCHAR}, #{patientClass,jdbcType=VARCHAR}, 
+      #{link,jdbcType=VARCHAR}, #{intro,jdbcType=VARCHAR}, #{rank,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{linkTitle,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Item">
+    insert into item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="doctorClass != null">
+        doctor_class,
+      </if>
+      <if test="patientClass != null">
+        patient_class,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="linkTitle != null">
+        link_title,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="doctorClass != null">
+        #{doctorClass,jdbcType=VARCHAR},
+      </if>
+      <if test="patientClass != null">
+        #{patientClass,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkTitle != null">
+        #{linkTitle,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Item">
+    update item
+    <set>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="doctorClass != null">
+        doctor_class = #{doctorClass,jdbcType=VARCHAR},
+      </if>
+      <if test="patientClass != null">
+        patient_class = #{patientClass,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="intro != null">
+        intro = #{intro,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        rank = #{rank,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="linkTitle != null">
+        link_title = #{linkTitle,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.Item">
+    update item
+    set icon = #{icon,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      doctor_class = #{doctorClass,jdbcType=VARCHAR},
+      patient_class = #{patientClass,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      intro = #{intro,jdbcType=VARCHAR},
+      rank = #{rank,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      link_title = #{linkTitle,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Item" resultType="java.lang.Integer">
+    select count(*) from item
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="icon != null">
+        and icon = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="unit != null">
+        and unit = #{unit,jdbcType=VARCHAR}
+      </if>
+      <if test="price != null">
+        and price = #{price,jdbcType=DECIMAL}
+      </if>
+      <if test="doctorClass != null">
+        and doctor_class = #{doctorClass,jdbcType=VARCHAR}
+      </if>
+      <if test="patientClass != null">
+        and patient_class = #{patientClass,jdbcType=VARCHAR}
+      </if>
+      <if test="link != null">
+        and link = #{link,jdbcType=VARCHAR}
+      </if>
+      <if test="intro != null">
+        and intro = #{intro,jdbcType=VARCHAR}
+      </if>
+      <if test="rank != null">
+        and rank = #{rank,jdbcType=INTEGER}
+      </if>
+      <if test="name != null">
+        and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="linkTitle != null">
+        and link_title = #{linkTitle,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from item where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.icon != null">
+      and icon = #{param1.icon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.unit != null">
+      and unit = #{param1.unit,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.price != null">
+      and price = #{param1.price,jdbcType=DECIMAL}
+    </if>
+    <if test="param1.doctorClass != null">
+      and doctor_class = #{param1.doctorClass,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.patientClass != null">
+      and patient_class = #{param1.patientClass,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.link != null">
+      and link = #{param1.link,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.intro != null">
+      and intro = #{param1.intro,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.rank != null">
+      and rank = #{param1.rank,jdbcType=INTEGER}
+    </if>
+    <if test="param1.name != null">
+      and name = #{param1.name,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.linkTitle != null">
+      and link_title = #{param1.linkTitle,jdbcType=VARCHAR}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.CustomerRelationRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.CustomerRelation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="a_customer_id" jdbcType="BIGINT" property="aCustomerId" />
+    <result column="b_customer_id" jdbcType="BIGINT" property="bCustomerId" />
+    <result column="relation" jdbcType="INTEGER" property="relation" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, a_customer_id, b_customer_id, relation
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from customer_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.CustomerRelation">
+    insert into customer_relation (id, a_customer_id, b_customer_id, 
+      relation)
+    values (#{id,jdbcType=BIGINT}, #{aCustomerId,jdbcType=BIGINT}, #{bCustomerId,jdbcType=BIGINT}, 
+      #{relation,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.CustomerRelation">
+    insert into customer_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="aCustomerId != null">
+        a_customer_id,
+      </if>
+      <if test="bCustomerId != null">
+        b_customer_id,
+      </if>
+      <if test="relation != null">
+        relation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="aCustomerId != null">
+        #{aCustomerId,jdbcType=BIGINT},
+      </if>
+      <if test="bCustomerId != null">
+        #{bCustomerId,jdbcType=BIGINT},
+      </if>
+      <if test="relation != null">
+        #{relation,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.CustomerRelation">
+    update customer_relation
+    <set>
+      <if test="aCustomerId != null">
+        a_customer_id = #{aCustomerId,jdbcType=BIGINT},
+      </if>
+      <if test="bCustomerId != null">
+        b_customer_id = #{bCustomerId,jdbcType=BIGINT},
+      </if>
+      <if test="relation != null">
+        relation = #{relation,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.CustomerRelation">
+    update customer_relation
+    set a_customer_id = #{aCustomerId,jdbcType=BIGINT},
+      b_customer_id = #{bCustomerId,jdbcType=BIGINT},
+      relation = #{relation,jdbcType=INTEGER}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.CustomerRelation" resultType="java.lang.Integer">
+    select count(*) from customer_relation
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="aCustomerId != null">
+        and a_customer_id = #{aCustomerId,jdbcType=BIGINT}
+      </if>
+      <if test="bCustomerId != null">
+        and b_customer_id = #{bCustomerId,jdbcType=BIGINT}
+      </if>
+      <if test="relation != null">
+        and relation = #{relation,jdbcType=INTEGER}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from customer_relation where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.aCustomerId != null">
+      and a_customer_id = #{param1.aCustomerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.bCustomerId != null">
+      and b_customer_id = #{param1.bCustomerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.relation != null">
+      and relation = #{param1.relation,jdbcType=INTEGER}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>

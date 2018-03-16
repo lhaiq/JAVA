@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hengsu.bhyy.core.repository.CaseReportRepository">
+  <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.CaseReport">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="appoint_id" jdbcType="BIGINT" property="appointId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="patient_id" jdbcType="BIGINT" property="patientId" />
+    <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
+    <result column="item_class_id" jdbcType="BIGINT" property="itemClassId" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="case_type" jdbcType="INTEGER" property="caseType" />
+    <result column="item_type" jdbcType="INTEGER" property="itemType" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hengsu.bhyy.core.entity.CaseReport">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, appoint_id, customer_id, patient_id, doctor_id, item_class_id, category_id, type, 
+    status, case_type, item_type, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from case_report
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from case_report
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
+    insert into case_report (id, appoint_id, customer_id, 
+      patient_id, doctor_id, item_class_id, 
+      category_id, type, status, 
+      case_type, item_type, create_time, 
+      content)
+    values (#{id,jdbcType=BIGINT}, #{appointId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
+      #{patientId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, #{itemClassId,jdbcType=BIGINT}, 
+      #{categoryId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
+      #{caseType,jdbcType=INTEGER}, #{itemType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
+    insert into case_report
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="appointId != null">
+        appoint_id,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="patientId != null">
+        patient_id,
+      </if>
+      <if test="doctorId != null">
+        doctor_id,
+      </if>
+      <if test="itemClassId != null">
+        item_class_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="caseType != null">
+        case_type,
+      </if>
+      <if test="itemType != null">
+        item_type,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="appointId != null">
+        #{appointId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="patientId != null">
+        #{patientId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="itemClassId != null">
+        #{itemClassId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="caseType != null">
+        #{caseType,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null">
+        #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
+    update case_report
+    <set>
+      <if test="appointId != null">
+        appoint_id = #{appointId,jdbcType=BIGINT},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=BIGINT},
+      </if>
+      <if test="patientId != null">
+        patient_id = #{patientId,jdbcType=BIGINT},
+      </if>
+      <if test="doctorId != null">
+        doctor_id = #{doctorId,jdbcType=BIGINT},
+      </if>
+      <if test="itemClassId != null">
+        item_class_id = #{itemClassId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="caseType != null">
+        case_type = #{caseType,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null">
+        item_type = #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
+    update case_report
+    set appoint_id = #{appointId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      patient_id = #{patientId,jdbcType=BIGINT},
+      doctor_id = #{doctorId,jdbcType=BIGINT},
+      item_class_id = #{itemClassId,jdbcType=BIGINT},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      case_type = #{caseType,jdbcType=INTEGER},
+      item_type = #{itemType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
+    update case_report
+    set appoint_id = #{appointId,jdbcType=BIGINT},
+      customer_id = #{customerId,jdbcType=BIGINT},
+      patient_id = #{patientId,jdbcType=BIGINT},
+      doctor_id = #{doctorId,jdbcType=BIGINT},
+      item_class_id = #{itemClassId,jdbcType=BIGINT},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      type = #{type,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      case_type = #{caseType,jdbcType=INTEGER},
+      item_type = #{itemType,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.CaseReport" resultType="java.lang.Integer">
+    select count(*) from case_report
+    <where>
+      <if test="id != null">
+        and id = #{id,jdbcType=BIGINT}
+      </if>
+      <if test="appointId != null">
+        and appoint_id = #{appointId,jdbcType=BIGINT}
+      </if>
+      <if test="customerId != null">
+        and customer_id = #{customerId,jdbcType=BIGINT}
+      </if>
+      <if test="patientId != null">
+        and patient_id = #{patientId,jdbcType=BIGINT}
+      </if>
+      <if test="doctorId != null">
+        and doctor_id = #{doctorId,jdbcType=BIGINT}
+      </if>
+      <if test="itemClassId != null">
+        and item_class_id = #{itemClassId,jdbcType=BIGINT}
+      </if>
+      <if test="categoryId != null">
+        and category_id = #{categoryId,jdbcType=BIGINT}
+      </if>
+      <if test="type != null">
+        and type = #{type,jdbcType=INTEGER}
+      </if>
+      <if test="status != null">
+        and status = #{status,jdbcType=INTEGER}
+      </if>
+      <if test="caseType != null">
+        and case_type = #{caseType,jdbcType=INTEGER}
+      </if>
+      <if test="itemType != null">
+        and item_type = #{itemType,jdbcType=INTEGER}
+      </if>
+      <if test="createTime != null">
+        and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="content != null">
+        and content = #{content,jdbcType=LONGVARCHAR}
+      </if>
+    </where>
+  </select>
+  <select id="selectPage" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from case_report where 1 = 1 
+    <if test="param1.id != null">
+      and id = #{param1.id,jdbcType=BIGINT}
+    </if>
+    <if test="param1.appointId != null">
+      and appoint_id = #{param1.appointId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.customerId != null">
+      and customer_id = #{param1.customerId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.patientId != null">
+      and patient_id = #{param1.patientId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.doctorId != null">
+      and doctor_id = #{param1.doctorId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.itemClassId != null">
+      and item_class_id = #{param1.itemClassId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.categoryId != null">
+      and category_id = #{param1.categoryId,jdbcType=BIGINT}
+    </if>
+    <if test="param1.type != null">
+      and type = #{param1.type,jdbcType=INTEGER}
+    </if>
+    <if test="param1.status != null">
+      and status = #{param1.status,jdbcType=INTEGER}
+    </if>
+    <if test="param1.caseType != null">
+      and case_type = #{param1.caseType,jdbcType=INTEGER}
+    </if>
+    <if test="param1.itemType != null">
+      and item_type = #{param1.itemType,jdbcType=INTEGER}
+    </if>
+    <if test="param1.createTime != null">
+      and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.content != null">
+      and content = #{param1.content,jdbcType=LONGVARCHAR}
+    </if>
+    <if test="param2.sort != null">
+      order by 
+      <foreach collection="param2.sort" item="order" separator=",">
+        ${order.property} ${order.direction}
+      </foreach>
+    </if>
+    <if test="param2.offset >= 0 and param2.pageSize > 0">
+      limit ${param2.offset}, ${param2.pageSize}
+    </if>
+  </select>
+</mapper>
