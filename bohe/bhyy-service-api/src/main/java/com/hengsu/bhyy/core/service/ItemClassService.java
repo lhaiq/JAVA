@@ -26,6 +26,6 @@ public interface ItemClassService {
 
     List<ItemClassModel> selectPage(ItemClassModel itemClassModel, Pageable pageable);
 
-    Page<Map<String,Object>> selectByType(int type, Pageable pageable);
+    Page<Map<String,Object>> selectByType(int type, String name,Pageable pageable);
 
 }

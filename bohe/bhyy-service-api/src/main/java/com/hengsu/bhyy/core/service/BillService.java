@@ -29,6 +29,8 @@ public interface BillService {
 
     List<BillModel> selectPage(BillModel billModel, Pageable pageable);
 
+    Page<Map<String, Object>> selectPageByKeyWords(Long doctorId,String keyWords, Pageable pageable);
+
     Page<Map<String, Object>> searchPage(Map<String, String> param, Pageable pageable);
 
     void pay(BillModel billModel,int payType);

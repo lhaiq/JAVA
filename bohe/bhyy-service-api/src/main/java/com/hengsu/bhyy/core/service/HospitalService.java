@@ -31,5 +31,7 @@ public interface HospitalService {
 
     Page<Map<String,Object>> searchPage(Map<String,String> param, Pageable pageable);
 
+    List<HospitalModel> selectByIds(List<Long> ids);
+
 
 }

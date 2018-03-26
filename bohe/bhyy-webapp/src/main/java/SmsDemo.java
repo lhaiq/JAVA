@@ -18,6 +18,7 @@ import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Created on 17/6/7.
@@ -78,19 +79,6 @@ public class SmsDemo {
 
 
     public static void main(String[] args) throws ClientException, InterruptedException {
-
-        //发短信
-        SendSmsResponse response = sendSms();
-        System.out.println("短信返回-----");
-        System.out.println("Code=" + response.getCode());
-        System.out.println("Message=" + response.getMessage());
-        System.out.println("RequestId=" + response.getRequestId());
-        System.out.println("BizId=" + response.getBizId());
-
-        Thread.sleep(3000L);
-
-
-
 
     }
 }

@@ -5,6 +5,7 @@ import com.hengsu.bhyy.core.model.CustomerModel;
 
 import java.util.Date;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public interface CustomerService {
 
     List<Map<String,Object>>  selectRelation(Long id);
 
+    Page<Map<String, Object>> searchPage(Map<String, String> param, Pageable pageable);
 
     List<Map<String,Object>> queryByName(String name);
 

@@ -21,10 +21,7 @@ import com.hengsu.bhyy.core.repository.AppointmentRepository;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -53,6 +50,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private DoctorVisitPlanService doctorVisitPlanService;
+
 
     @Transactional
     @Override
@@ -135,7 +133,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         condition.append(" WHERE 1=1 and a.item_class_id=ic.id and d.id=a.doctor_id and c.id=a.patient_id");
 
         if (StringUtils.isNotEmpty(param.get("appointId"))) {
-            condition.append(" and a.appoint_id='" + param.get("appointId") + "'");
+            condition.append(" and a.appoint_id like '%" + param.get("appointId") + "%'");
         }
 
         if (StringUtils.isNotEmpty(param.get("itemClassId"))) {
@@ -154,7 +152,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         } else {
             condition.append(" and ((a.status in (1)");
-            if(StringUtils.isEmpty(param.get("startTime"))&&StringUtils.isEmpty(param.get("endTime"))){
+            if (StringUtils.isEmpty(param.get("startTime")) && StringUtils.isEmpty(param.get("endTime"))) {
 //                condition.append(" and a.time < '" + simpleDateFormat.format(new Date()) + "'");
                 condition.append(" or a.time >'" + simpleDateFormat.format(DateUtils.addDays(new Date(), 2)) + "'");
             }
@@ -176,7 +174,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         if (StringUtils.isNotEmpty(param.get("phone"))) {
-            condition.append(" and c.phone='" + param.get("phone") + "'");
+            condition.append(" and c.phone like '%" + param.get("phone") + "%'");
         }
 
         if (StringUtils.isNotEmpty(param.get("customerOrg"))) {
@@ -215,7 +213,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         String select = "select a.id,a.appoint_id as appointId,a.source, a.status,c.id as customerId,c.real_name as customerName,c.phone, ic.id as itemClassId,ic.CLASS_NAME as className,\n" +
-                "d.id as doctorId,  d.real_name as doctorName,a.time";
+                "d.id as doctorId,  d.real_name as doctorName,a.time,a.type ";
 
         String tables = " FROM appointment a,customer c,doctor d,item_class ic ";
 
@@ -269,7 +267,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         if (StringUtils.isNotEmpty(param.get("phone"))) {
-            condition.append(" and c.phone='" + param.get("phone") + "'");
+            condition.append(" and c.phone like '%" + param.get("phone") + "%'");
         }
 
         if (StringUtils.isNotEmpty(param.get("customerOrg"))) {
@@ -298,6 +296,33 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
         List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables + condition.toString() + limitSql.toString());
+
+
+        //加评论
+        List<Long> ids = new ArrayList<>();
+        for (Map<String, Object> map : content) {
+            Long id = Long.parseLong(map.get("id").toString());
+            ids.add(id);
+        }
+
+
+        String commentSql = "SELECT a.id as appointmentId,bc.id,bc.bill_id as billId,bc.tags,bc.content,bc.create_time as createTime\n" +
+                "FROM bill_comment bc, bill b, appointment a\n" +
+                "WHERE a.id = b.appointment_id AND bc.bill_id = b.id AND a.id IN (" + StringUtils.join(ids, ",") + ")\n";
+
+
+        List<Map<String, Object>> commentContent = jdbcTemplate.queryForList(commentSql);
+        Map<Long, Map<String, Object>> commentMap = new HashMap<>();
+        for (Map<String, Object> map : commentContent) {
+            commentMap.put(Long.parseLong(map.get("appointmentId").toString()), map);
+        }
+
+        for (Map<String, Object> map : content) {
+            Long id = Long.parseLong(map.get("id").toString());
+            map.put("comment", commentMap.get(id));
+        }
+
+
         Long count = jdbcTemplate.queryForObject("select count(*) " + tables + condition.toString(), Long.class);
 
         Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
@@ -306,13 +331,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Page<Map<String, Object>> selectDoctorPage(Long doctorId, int status, Pageable pageable) {
+    public Page<Map<String, Object>> selectDoctorPage(Long doctorId, Map<String, String> param, Pageable pageable) {
+
+        int status = Integer.parseInt(param.get("status").toString());
 
         if (status != 3) {
             String select = "SELECT\n" +
                     "  a.id,\n" +
                     "  a.customer_id AS customerId,\n" +
-                    "  c.real_name   AS realName,\n" +
+                    "  a.customer_name   AS customerName,\n" +
+                    "  a.patient_name   AS patientName,\n" +
                     "  c.phone,\n" +
                     "  ic.CLASS_NAME    className,\n" +
                     "  a.time,\n" +
@@ -324,9 +352,15 @@ public class AppointmentServiceImpl implements AppointmentService {
                     "WHERE a.doctor_id = ?\n" +
                     "      AND a.customer_id = c.id AND a.item_class_id = ic.id and a.status=? ";
 
+            if (StringUtils.isNotEmpty(param.get("keywords"))) {
+                String keywords = param.get("keywords");
+                from += " AND (a.patient_name LIKE '%" + keywords + "%' OR c.phone LIKE '%" + keywords + "%' OR ic.CLASS_NAME LIKE '%" + keywords + "%' )";
+            }
+
+
             String orderBy = " ORDER BY a.time DESC";
 
-            List<Map<String, Object>> content = jdbcTemplate.queryForList(select + from + orderBy + " limit ?,? ", doctorId, status, pageable.getOffset(), pageable.getPageSize());
+            List<Map<String, Object>> content = jdbcTemplate.queryForList(select + from + orderBy + " limit ?,? ", doctorId, param, pageable.getOffset(), pageable.getPageSize());
             Long count = jdbcTemplate.queryForObject(" select count(*) " + from, Long.class, doctorId, status);
             Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
             return page;
@@ -346,7 +380,8 @@ public class AppointmentServiceImpl implements AppointmentService {
             String select = "SELECT\n" +
                     "  a.id,\n" +
                     "  a.customer_id AS customerId,\n" +
-                    "  c.real_name   AS realName,\n" +
+                    "  a.customer_name   AS customerName,\n" +
+                    "  a.patient_name   AS patientName,\n" +
                     "  c.phone,\n" +
                     "  ic.CLASS_NAME    className,\n" +
                     "  a.time,\n" +
@@ -388,6 +423,23 @@ public class AppointmentServiceImpl implements AppointmentService {
         //新计划
         List<Long> ids = JSON.parseArray(appointmentModel.getVisitPlans(), Long.class);
         doctorVisitPlanService.updateStatus(ids, DoctorVisitPlanModel.USED);
+
+        DoctorModel doctorModel = doctorService.findByPrimaryKey(appointmentModel.getDoctorId());
+        CustomerModel customerModel = customerService.findByPrimaryKey(appointmentModel.getCustomerId());
+        CustomerModel patientModel = customerService.findByPrimaryKey(appointmentModel.getPatientId());
+        DoctorConfigModel configModel = doctorConfigService.findByPrimaryKey(appointmentModel.getDoctorConfigId());
+        HospitalModel hospitalModel = hospitalService.findByPrimaryKey(configModel.getHospitalId());
+
+
+        Map<String, Object> snapshot = ImmutableMap.of("doctor", doctorModel, "customer", customerModel, "patient", patientModel);
+        appointmentModel.setSnapshot(JSON.toJSONString(snapshot));
+
+
+        appointmentModel.setDoctorName(doctorModel.getRealName());
+        appointmentModel.setCustomerName(customerModel.getRealName());
+        appointmentModel.setPatientName(patientModel.getRealName());
+        appointmentModel.setHospitalName(hospitalModel.getName());
+        appointmentModel.setAddress(hospitalModel.getAddress());
         return appointmentRepo.updateByPrimaryKeySelective(beanMapper.map(appointmentModel, Appointment.class));
     }
 

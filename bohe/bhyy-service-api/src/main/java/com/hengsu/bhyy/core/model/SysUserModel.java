@@ -14,7 +14,7 @@ public class SysUserModel{
 	private String password;
 	private Date createTime;
 	private Integer enable;
-	private List<Long> roleIds;
+	private Long roleId;
 		
 	public void setId(Long id){
 		this.id = id;
@@ -73,11 +73,11 @@ public class SysUserModel{
 	}
 
 
-	public void setRoleIds(List<Long> roleIds) {
-		this.roleIds = roleIds;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
-	public List<Long> getRoleIds() {
-		return roleIds;
+	public Long getRoleId() {
+		return roleId;
 	}
 }

@@ -58,7 +58,7 @@
       #{recheckDate,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{isComment,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Bill">
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Bill" keyProperty="id" useGeneratedKeys="true">
     insert into bill
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

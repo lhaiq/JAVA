@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,15 +93,15 @@ public class HospitalServiceImpl implements HospitalService {
 		}
 
 		if (StringUtils.isNotEmpty(param.get("telephone"))) {
-			condition.append(" and telephone = " + param.get("telephone"));
+			condition.append(" and telephone like '%" + param.get("telephone")+"%' ");
 		}
 
 		if (StringUtils.isNotEmpty(param.get("endDate"))) {
-			condition.append(" and  establish_date < '" + param.get("endDate") + "'");
+			condition.append(" and  create_time < '" + param.get("endDate") + "'");
 		}
 
 		if (StringUtils.isNotEmpty(param.get("startDate"))) {
-			condition.append(" and establish_date > '" + param.get("startDate") + "'");
+			condition.append(" and create_time > '" + param.get("startDate") + "'");
 		}
 
 
@@ -109,7 +110,7 @@ public class HospitalServiceImpl implements HospitalService {
 		}
 
 		if (StringUtils.isNotEmpty(param.get("boheJoin"))) {
-			condition.append(" and bohe_join '%" + param.get("boheJoin") + "%'");
+			condition.append(" and bohe_join like '%" + param.get("boheJoin") + "%'");
 		}
 
 
@@ -125,6 +126,12 @@ public class HospitalServiceImpl implements HospitalService {
 		Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
 
 		return page;
+	}
+
+	@Override
+	public List<HospitalModel> selectByIds(List<Long> ids) {
+		String sql="select id,name from hospital where id in ("+StringUtils.join(ids,",")+")";
+		return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(HospitalModel.class));
 	}
 
 	@Transactional

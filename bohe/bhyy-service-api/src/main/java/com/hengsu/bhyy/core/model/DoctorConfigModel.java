@@ -8,6 +8,7 @@ public class DoctorConfigModel{
 	private Long id;
 	private Long doctorId;
 	private Long hospitalId;
+	private String  hospitalName;
 	private String date;
 	private Integer dayOfWeek;
 	private Integer interval;
@@ -88,6 +89,12 @@ public class DoctorConfigModel{
 	public Integer getStatus(){
 		return this.status;
 	}
-		
-		
+
+	public void setHospitalName(String hospitalName) {
+		this.hospitalName = hospitalName;
+	}
+
+	public String getHospitalName() {
+		return hospitalName;
+	}
 }

@@ -1,5 +1,6 @@
 package com.hengsu.bhyy.core.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -55,8 +56,13 @@ public class ItemClassRestApiController {
     }
 
 	@GetMapping(value = "/core/itemClass/type")
-	public ResponseEnvelope<Page<Map<String,Object>>> selectByType(@RequestParam int type,Pageable pageable){
-		Page<Map<String,Object>> page = itemClassService.selectByType(type,pageable);
+	public ResponseEnvelope<Page<Map<String,Object>>> selectByType(@RequestParam int type,
+																   @RequestParam(required = false) String name,
+																   Pageable pageable)throws Exception{
+		if(StringUtils.isNotEmpty(name)){
+			name = new String(name.getBytes("iso-8859-1"), "utf-8");
+		}
+		Page<Map<String,Object>> page = itemClassService.selectByType(type,name,pageable);
 		ResponseEnvelope<Page<Map<String,Object>>> responseEnv = new ResponseEnvelope<>(page,true);
 		return responseEnv;
 	}

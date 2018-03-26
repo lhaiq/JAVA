@@ -10,6 +10,7 @@ import com.hengsu.bhyy.core.model.DoctorLogModel;
 import com.hengsu.bhyy.core.model.SessionUserModel;
 import com.hengsu.bhyy.core.service.DoctorLogService;
 import com.hengsu.bhyy.core.service.SmsService;
+import com.hengsu.bhyy.core.vo.DoctorSearchVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -172,7 +173,7 @@ public class DoctorRestApiController {
 
 
     @PostMapping(value = "/core/doctor/search")
-    public ResponseEnvelope<Page<Map<String, Object>>> searchDoctor(@RequestBody Map<String, String> param,
+    public ResponseEnvelope<Page<Map<String, Object>>> searchDoctor(@RequestBody Map<String, Object> param,
                                                Pageable pageable) {
         Page<Map<String, Object>> page = doctorService.searchPage(param, pageable);
         ResponseEnvelope<Page<Map<String, Object>> > responseEnv = new ResponseEnvelope<>(page, true);
@@ -181,9 +182,10 @@ public class DoctorRestApiController {
 
 
     @PostMapping(value = "/core/doctor/search/app")
-    public ResponseEnvelope<Page<Map<String, Object>> > searchDoctorForApp(@RequestBody Map<String, String> param,
-                                                     Pageable pageable) {
-        Page<Map<String, Object>> page = doctorService.searchPageForApp(param, pageable);
+    public ResponseEnvelope<Page<Map<String, Object>> > searchDoctorForApp(@RequestBody DoctorSearchVO doctorSearchVO,
+                                                                           Pageable pageable) {
+        Page<Map<String, Object>> page = doctorService.searchPageForApp(doctorSearchVO.getDayOfWeek(),
+                doctorSearchVO.getName(),doctorSearchVO.getItemName(), pageable);
         ResponseEnvelope<Page<Map<String, Object>> > responseEnv = new ResponseEnvelope<>(page, true);
         return responseEnv;
     }

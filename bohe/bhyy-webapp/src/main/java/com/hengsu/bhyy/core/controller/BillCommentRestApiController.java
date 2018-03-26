@@ -1,6 +1,9 @@
 package com.hengsu.bhyy.core.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.hengsu.bhyy.core.HRErrorCode;
+import com.hengsu.bhyy.core.model.BillModel;
+import com.hengsu.bhyy.core.service.BillService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,9 @@ public class BillCommentRestApiController {
 	@Autowired
 	private BillCommentService billCommentService;
 
+	@Autowired
+	private BillService billService;
+
 	@GetMapping(value = "/core/{billId}/billComment")
 	public ResponseEnvelope<BillCommentVO> getBillCommentByBillId(@PathVariable Long billId){
 		BillCommentModel param = new BillCommentModel();
@@ -56,8 +62,19 @@ public class BillCommentRestApiController {
 
 
 	@PostMapping(value = "/core/billComment")
-	public ResponseEnvelope<Integer> createBillComment(@RequestBody BillCommentVO billCommentVO){
+	public ResponseEnvelope<Integer> createBillComment(@RequestAttribute("userId") Long userId,
+			@RequestBody BillCommentVO billCommentVO){
 		BillCommentModel billCommentModel = beanMapper.map(billCommentVO, BillCommentModel.class);
+		BillModel billModel = billService.findByPrimaryKey(billCommentModel.getBillId());
+		if(billModel.getIsComment()==1){
+			HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("6000","已评论"));
+		}
+
+		if(!userId.equals(billModel.getCustomerId())){
+			HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("6000","不是你的订单"));
+		}
+
+
 		Integer  result = billCommentService.createSelective(billCommentModel);
 		ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<>(result,true);
         return responseEnv;

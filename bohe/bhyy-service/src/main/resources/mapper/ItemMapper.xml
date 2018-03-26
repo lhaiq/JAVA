@@ -191,7 +191,7 @@
         and rank = #{rank,jdbcType=INTEGER}
       </if>
       <if test="name != null">
-        and name = #{name,jdbcType=VARCHAR}
+        and name like concat('%', #{name},'%')
       </if>
       <if test="linkTitle != null">
         and link_title = #{linkTitle,jdbcType=VARCHAR}
@@ -230,7 +230,8 @@
       and rank = #{param1.rank,jdbcType=INTEGER}
     </if>
     <if test="param1.name != null">
-      and name = #{param1.name,jdbcType=VARCHAR}
+
+      and name like concat('%', #{param1.name},'%')
     </if>
     <if test="param1.linkTitle != null">
       and link_title = #{param1.linkTitle,jdbcType=VARCHAR}

@@ -14,7 +14,8 @@ public class SysUserVO{
 	private String password;
 	private Date createTime;
 	private Integer enable;
-	private List<Long> roleIds;
+	private Long roleId;
+	private String roleName;
 	private String sessionId;
 
 
@@ -75,13 +76,6 @@ public class SysUserVO{
 	}
 
 
-	public void setRoleIds(List<Long> roleIds) {
-		this.roleIds = roleIds;
-	}
-
-	public List<Long> getRoleIds() {
-		return roleIds;
-	}
 
 	public void setSessionId(String sessionId) {
 		this.sessionId = sessionId;
@@ -89,5 +83,22 @@ public class SysUserVO{
 
 	public String getSessionId() {
 		return sessionId;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+
+	public Long getRoleId() {
+		return roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
 	}
 }

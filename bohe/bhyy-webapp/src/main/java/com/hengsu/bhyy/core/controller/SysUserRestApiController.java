@@ -70,6 +70,20 @@ public class SysUserRestApiController {
         return responseEnv;
     }
 
+
+	/**
+	 * 搜索
+	 * @param param
+	 * @param pageable
+	 * @return
+     */
+	@PostMapping(value = "/core/sysUser/search")
+	public ResponseEnvelope<Page<Map<String,Object>>> searchSysUser(@RequestBody Map<String,String> param, Pageable pageable){
+		Page<Map<String,Object>> page = sysUserService.searchPage(param,pageable);
+		ResponseEnvelope<Page<Map<String,Object>>> responseEnv = new ResponseEnvelope<>(page,true);
+		return responseEnv;
+	}
+
 	@PostMapping(value = "/core/sysUser")
 	public ResponseEnvelope<Integer> createSysUser(@RequestBody SysUserVO sysUserVO){
 		SysUserModel sysUserModel = beanMapper.map(sysUserVO, SysUserModel.class);
@@ -92,6 +106,9 @@ public class SysUserRestApiController {
 					@RequestBody SysUserVO sysUserVO){
 		SysUserModel sysUserModel = beanMapper.map(sysUserVO, SysUserModel.class);
 		sysUserModel.setId(id);
+		if(StringUtils.isNotEmpty(sysUserModel.getPassword())){
+			sysUserModel.setPassword(DigestUtils.md5Hex(sysUserModel.getPassword()));
+		}
 		Integer  result = sysUserService.updateByPrimaryKeySelective(sysUserModel);
 		ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<Integer>(result,true);
         return responseEnv;

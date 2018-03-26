@@ -1,5 +1,6 @@
 package com.hengsu.bhyy.core.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -42,8 +43,12 @@ public class ItemRestApiController {
 	}
 
 	@GetMapping(value = "/core/item")
-    public ResponseEnvelope<Page<ItemModel>> listItem(ItemVO itemVO,Pageable pageable){
+    public ResponseEnvelope<Page<ItemModel>> listItem(ItemVO itemVO,Pageable pageable) throws Exception{
 
+		if(StringUtils.isNotEmpty(itemVO.getName())){
+			String name = new String(itemVO.getName().getBytes("iso-8859-1"), "utf-8");
+			itemVO.setName(name);
+		}
 		ItemModel param = beanMapper.map(itemVO, ItemModel.class);
         List<ItemModel> itemModelModels = itemService.selectPage(param,pageable);
         long count=itemService.selectCount(param);

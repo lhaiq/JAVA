@@ -8,6 +8,7 @@ import com.hengsu.bhyy.core.service.BillCommentService;
 import com.hengsu.bhyy.core.service.BillItemService;
 import com.hengsu.bhyy.core.vo.BillCommentVO;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
@@ -72,13 +73,15 @@ public class BillRestApiController {
             BillCommentVO billCommentVO = beanMapper.map(billCommentModel, BillCommentVO.class);
             billVO.setComment(billCommentVO);
         }
+
+        billVO.setItemNames(JSON.parseArray(billModel.getItemName(), String.class));
         ResponseEnvelope<BillVO> responseEnv = new ResponseEnvelope<>(billVO, true);
         return responseEnv;
     }
 
     @GetMapping(value = "/core/customer/bill")
     public ResponseEnvelope<Page<BillModel>> listCustomerBill(@RequestAttribute("userId") Long customerId,
-                                                      Pageable pageable) {
+                                                              Pageable pageable) {
 
         BillModel param = new BillModel();
         param.setCustomerId(customerId);
@@ -90,14 +93,15 @@ public class BillRestApiController {
     }
 
     @GetMapping(value = "/core/doctor/bill")
-    public ResponseEnvelope<Page<BillModel>> listDoctorBill(@RequestAttribute("userId") Long customerId,
-                                                      Pageable pageable) {
-        BillModel param = new BillModel();
-        param.setDoctorId(customerId);
-        List<BillModel> billModelModels = billService.selectPage(param, pageable);
-        long count = billService.selectCount(param);
-        Page<BillModel> page = new PageImpl<>(billModelModels, pageable, count);
-        ResponseEnvelope<Page<BillModel>> responseEnv = new ResponseEnvelope<>(page, true);
+    public ResponseEnvelope<Page<Map<String, Object>>> listDoctorBill(@RequestAttribute("userId") Long doctorId,
+                                                                      @RequestParam(value = "keywords",required = false) String keywords,
+                                                                      Pageable pageable) throws Exception {
+        if(StringUtils.isNotEmpty(keywords)){
+            keywords = new String(keywords.getBytes("iso-8859-1"), "utf-8");
+        }
+
+        Page<Map<String, Object>> page = billService.selectPageByKeyWords(doctorId, keywords, pageable);
+        ResponseEnvelope<Page<Map<String, Object>>> responseEnv = new ResponseEnvelope<>(page, true);
         return responseEnv;
     }
 
@@ -110,7 +114,7 @@ public class BillRestApiController {
     @PostMapping(value = "/core/bill")
     public ResponseEnvelope<Integer> createBill(@RequestBody BillVO billVO) {
         BillModel billModel = beanMapper.map(billVO, BillModel.class);
-
+        billModel.setItemName(JSON.toJSONString(billVO.getItemNames()));
         Integer result = billService.createSelective(billModel);
         ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<>(result, true);
         return responseEnv;
@@ -153,17 +157,17 @@ public class BillRestApiController {
     @PutMapping(value = "/core/bill/pay/{id}")
     public ResponseEnvelope<Integer> pay(@PathVariable Long id,
                                          @RequestAttribute("userId") Long userId
-                                                  ) {
+    ) {
         BillModel billModel = billService.findByPrimaryKey(id);
-        if(billModel.getStatus()!=0){
-            HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("5000","该订单已支付"));
+        if (billModel.getStatus() != 0) {
+            HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("5000", "该订单已支付"));
         }
 
-        if(!billModel.getCustomerId().equals(userId)){
-            HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("5000","只能支付自己的订单"));
+        if (!billModel.getCustomerId().equals(userId)) {
+            HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("5000", "只能支付自己的订单"));
         }
 
-        billService.pay(billModel,1);
+        billService.pay(billModel, 1);
         ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<Integer>(1, true);
         return responseEnv;
     }

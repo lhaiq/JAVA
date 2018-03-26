@@ -16,7 +16,7 @@ public class BillVO{
 	private Long doctorId;
 	private String doctorName;
 	private String address;
-	private String itemName;
+	private List<String> itemNames;
 	private Date createTime;
 	private BigDecimal originalCost;
 	private BigDecimal discount;
@@ -95,14 +95,6 @@ public class BillVO{
 	
 	public String getAddress(){
 		return this.address;
-	}
-		
-	public void setItemName(String itemName){
-		this.itemName = itemName;
-	}
-	
-	public String getItemName(){
-		return this.itemName;
 	}
 
 	public void setCreateTime(Date createTime) {
@@ -223,5 +215,13 @@ public class BillVO{
 
 	public BillCommentVO getComment() {
 		return comment;
+	}
+
+	public void setItemNames(List<String> itemNames) {
+		this.itemNames = itemNames;
+	}
+
+	public List<String> getItemNames() {
+		return itemNames;
 	}
 }

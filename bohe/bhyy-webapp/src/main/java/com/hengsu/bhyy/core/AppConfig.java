@@ -10,6 +10,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 import javax.sql.DataSource;
+import java.io.File;
 
 /**
  * Created by haiquanli on 16/7/18.
@@ -41,5 +42,6 @@ public class AppConfig extends WebMvcConfigurerAdapter{
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 
 }

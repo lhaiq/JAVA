@@ -25,6 +25,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 预约
+ */
 @RestController
 @RequestMapping("/bhyy")
 public class AppointmentRestApiController {
@@ -62,12 +65,12 @@ public class AppointmentRestApiController {
     }
 
 
-	@GetMapping(value = "/core/doctor/appointment")
+	@PostMapping(value = "/core/doctor/appointment")
 	public ResponseEnvelope<Page<Map<String,Object>>> listDoctorAppointment(@RequestAttribute("userId") Long userId,
-																		  @RequestParam int status,
+																			@RequestBody Map<String,String> param,
 																		  Pageable pageable){
 
-		Page<Map<String,Object>> page  = appointmentService.selectDoctorPage(userId,status,pageable);
+		Page<Map<String,Object>> page  = appointmentService.selectDoctorPage(userId,param,pageable);
 		ResponseEnvelope<Page<Map<String,Object>>> responseEnv = new ResponseEnvelope<>(page,true);
 		return responseEnv;
 	}
@@ -90,6 +93,12 @@ public class AppointmentRestApiController {
 	}
 
 
+	/**
+	 * 就诊管理
+	 * @param param
+	 * @param pageable
+     * @return
+     */
 	@PostMapping(value = "/core/visit/search")
 	public ResponseEnvelope<Page<Map<String,Object>>> searchVisit(@RequestBody Map<String,String> param, Pageable pageable){
 		Page<Map<String,Object>> page = appointmentService.searchVisitPage(param,pageable);

@@ -80,6 +80,11 @@ configure(allprojects - javaProjects) {
 }
 
 configure(javaProjects) {
+
+
+
+
+
     apply from: "$rootDir/gradle/javaProjects.gradle"
     apply from: "$rootDir/gradle/mavenDeployment.gradle"
 }

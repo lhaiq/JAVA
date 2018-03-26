@@ -2,7 +2,9 @@ package com.hengsu.bhyy.core.controller;
 
 import com.hengsu.bhyy.core.HRErrorCode;
 import com.hengsu.bhyy.core.model.DoctorVisitPlanModel;
+import com.hengsu.bhyy.core.model.HospitalModel;
 import com.hengsu.bhyy.core.service.DoctorVisitPlanService;
+import com.hengsu.bhyy.core.service.HospitalService;
 import com.hengsu.bhyy.core.vo.DoctorVisitPlanVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -25,6 +27,8 @@ import com.hengsu.bhyy.core.service.DoctorConfigService;
 import com.hengsu.bhyy.core.model.DoctorConfigModel;
 import com.hengsu.bhyy.core.vo.DoctorConfigVO;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +47,9 @@ public class DoctorConfigRestApiController {
 	@Autowired
 	private DoctorVisitPlanService doctorVisitPlanService;
 
+	@Autowired
+	private HospitalService hospitalService;
+
 	@GetMapping(value = "/core/doctorConfig/{id}")
 	public ResponseEnvelope<DoctorConfigVO> getDoctorConfigById(@PathVariable Long id){
 		DoctorConfigModel doctorConfigModel = doctorConfigService.findByPrimaryKey(id);
@@ -56,6 +63,24 @@ public class DoctorConfigRestApiController {
 
 		DoctorConfigModel param = beanMapper.map(doctorConfigVO, DoctorConfigModel.class);
         List<DoctorConfigModel> doctorConfigModelModels = doctorConfigService.selectPage(param,pageable);
+		List<Long> ids = new ArrayList<>();
+		for(DoctorConfigModel doctorConfigModel:doctorConfigModelModels){
+			ids.add(doctorConfigModel.getHospitalId());
+		}
+
+		if(CollectionUtils.isNotEmpty(ids)){
+			List<HospitalModel> hospitalModels = hospitalService.selectByIds(ids);
+			Map<Long,String> hospitalNames = new HashMap<>();
+			for(HospitalModel hospitalModel:hospitalModels){
+				hospitalNames.put(hospitalModel.getId(),hospitalModel.getName());
+			}
+
+			for(DoctorConfigModel doctorConfigModel:doctorConfigModelModels){
+				doctorConfigModel.setHospitalName(hospitalNames.get(doctorConfigModel.getHospitalId()));
+			}
+		}
+
+
         long count=doctorConfigService.selectCount(param);
         Page<DoctorConfigModel> page = new PageImpl<>(doctorConfigModelModels,pageable,count);
         ResponseEnvelope<Page<DoctorConfigModel>> responseEnv = new ResponseEnvelope<>(page,true);

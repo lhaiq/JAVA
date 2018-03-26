@@ -94,6 +94,15 @@ public class CustomerRestApiController {
     }
 
 
+    @PostMapping(value = "/core/customer/search")
+    public ResponseEnvelope<Page<Map<String, Object>>> searchCustomer(@RequestBody Map<String, String> param,
+                                                                    Pageable pageable) {
+        Page<Map<String, Object>> page = customerService.searchPage(param, pageable);
+        ResponseEnvelope<Page<Map<String, Object>> > responseEnv = new ResponseEnvelope<>(page, true);
+        return responseEnv;
+    }
+
+
     @PostMapping(value = "/core/customer")
     public ResponseEnvelope<Long> createCustomer(@RequestBody CustomerVO customerVO) {
         CustomerModel customerModel = beanMapper.map(customerVO, CustomerModel.class);

@@ -72,7 +72,7 @@ public class ItemClassServiceImpl implements ItemClassService {
 	}
 
 	@Override
-	public Page<Map<String, Object>> selectByType(int type, Pageable pageable) {
+	public Page<Map<String, Object>> selectByType(int type,String name, Pageable pageable) {
 
 		String mainType = "patient_class";
 		if(type==0){
@@ -86,6 +86,14 @@ public class ItemClassServiceImpl implements ItemClassService {
 				"  SELECT "+mainType+",count(*) as count\n" +
 				"FROM item GROUP BY "+mainType+"\n" +
 				"  ) t on ic.id=t."+mainType;
+
+		tables+=" WHERE ic.TYPE = "+type ;
+
+		if(StringUtils.isNotEmpty(name)){
+			tables+=" and ic.class_name LIKE '%"+name+"%'";
+		}
+
+		tables+=" ORDER BY  ic.rank DESC ";
 
 
 		StringBuffer limitSql = new StringBuffer();

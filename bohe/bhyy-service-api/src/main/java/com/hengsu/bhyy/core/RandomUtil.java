@@ -53,11 +53,7 @@ public class RandomUtil {
     public static String getIdByUUIdAndTime() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
 
-        int hashCodeV = UUID.randomUUID().toString().hashCode();
-        if (hashCodeV < 0) {//有可能是负数
-            hashCodeV = -hashCodeV;
-        }
-        return simpleDateFormat.format(new Date()) + String.format("%010d", hashCodeV);
+        return simpleDateFormat.format(new Date()) ;
     }
 
 }

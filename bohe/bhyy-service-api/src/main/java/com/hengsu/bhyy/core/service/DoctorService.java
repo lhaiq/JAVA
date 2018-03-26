@@ -30,9 +30,9 @@ public interface DoctorService {
 
     List<DoctorModel> selectPage(DoctorModel doctorModel, Pageable pageable);
 
-    Page<Map<String, Object>> searchPage(Map<String, String> param, Pageable pageable);
+    Page<Map<String, Object>> searchPage(Map<String, Object> param, Pageable pageable);
 
-    Page<Map<String, Object>> searchPageForApp(Map<String, String> param, Pageable pageable);
+    Page<Map<String, Object>> searchPageForApp(List<Long> dayOfWeek,String name,String itemName, Pageable pageable);
 
 
     void addBalance(Long id, Long billId,BigDecimal money);

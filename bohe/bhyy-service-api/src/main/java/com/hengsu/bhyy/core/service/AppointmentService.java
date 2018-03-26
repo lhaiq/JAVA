@@ -30,7 +30,7 @@ public interface AppointmentService {
 
     Page<Map<String,Object>> searchVisitPage(Map<String,String> param, Pageable pageable);
 
-    Page<Map<String,Object>> selectDoctorPage(Long doctorId,int status, Pageable pageable);
+    Page<Map<String,Object>> selectDoctorPage(Long doctorId,Map<String,String> param, Pageable pageable);
 
     Page<Map<String,Object>> selectCustomerPage(Long customerId,int status, Pageable pageable);
 
