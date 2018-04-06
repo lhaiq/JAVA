@@ -8,20 +8,22 @@ import java.util.List;
 
 public interface WalletService{
 
-public int create(WalletModel walletModel);
+ int create(WalletModel walletModel);
 
-public int createSelective(WalletModel walletModel);
+ int createSelective(WalletModel walletModel);
 
-public WalletModel findByPrimaryKey(Long id);
+ WalletModel findByPrimaryKey(Long id);
 
-public int updateByPrimaryKey(WalletModel walletModel);
+ int updateByPrimaryKey(WalletModel walletModel);
 
-public int updateByPrimaryKeySelective(WalletModel walletModel);
+ int updateByPrimaryKeySelective(WalletModel walletModel);
 
-public int deleteByPrimaryKey(Long id);
+ int deleteByPrimaryKey(Long id);
 
-public long selectCount(WalletModel walletModel);
+ long selectCount(WalletModel walletModel);
 
-public List<WalletModel> selectPage(WalletModel walletModel, Pageable pageable);
+ List<WalletModel> selectPage(WalletModel walletModel, Pageable pageable);
+
+ List<WalletModel> selectByMonth(Long doctorId,String month, Pageable pageable);
 
 }

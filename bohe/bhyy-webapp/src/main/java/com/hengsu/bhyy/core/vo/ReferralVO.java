@@ -18,9 +18,27 @@ public class ReferralVO{
 	private Long appointId;
 	private Long billId;
 	private String customerName;
+	private String customerIcon;
 	private String doctorName;
+	private String doctorIcon;
 	private String customerPhone;
 	private List<ReferralLogVO> logs;
+
+	public void setCustomerIcon(String customerIcon) {
+		this.customerIcon = customerIcon;
+	}
+
+	public String getCustomerIcon() {
+		return customerIcon;
+	}
+
+	public void setDoctorIcon(String doctorIcon) {
+		this.doctorIcon = doctorIcon;
+	}
+
+	public String getDoctorIcon() {
+		return doctorIcon;
+	}
 
 	public void setCustomerPhone(String customerPhone) {
 		this.customerPhone = customerPhone;

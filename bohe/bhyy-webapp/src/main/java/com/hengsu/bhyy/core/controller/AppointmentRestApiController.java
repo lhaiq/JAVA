@@ -1,6 +1,10 @@
 package com.hengsu.bhyy.core.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.hengsu.bhyy.core.model.CustomerModel;
+import com.hengsu.bhyy.core.model.DoctorModel;
+import com.hengsu.bhyy.core.service.CustomerService;
+import com.hengsu.bhyy.core.service.DoctorService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +44,12 @@ public class AppointmentRestApiController {
 	@Autowired
 	private AppointmentService appointmentService;
 
+	@Autowired
+	private CustomerService customerService;
+
+	@Autowired
+	private DoctorService doctorService;
+
 	@GetMapping(value = "/core/appointment/{id}")
 	public ResponseEnvelope<AppointmentVO> getAppointmentById(@PathVariable Long id){
 		AppointmentModel appointmentModel = appointmentService.findByPrimaryKey(id);
@@ -47,6 +57,13 @@ public class AppointmentRestApiController {
 		if(StringUtils.isNotEmpty(appointmentModel.getVisitPlans())){
 			appointmentVO.setVisitPlanIds(JSON.parseArray(appointmentModel.getVisitPlans(),Long.class));
 		}
+
+		CustomerModel customerModel = customerService.findByPrimaryKey(appointmentModel.getCustomerId());
+		CustomerModel patientModel = customerService.findByPrimaryKey(appointmentModel.getPatientId());
+		DoctorModel doctorModel = doctorService.findByPrimaryKey(appointmentModel.getDoctorId());
+		appointmentVO.setCustomerPhone(customerModel.getPhone());
+		appointmentVO.setPatientPhone(patientModel.getPhone());
+		appointmentVO.setDoctorPhone(doctorModel.getPhone());
 
 		ResponseEnvelope<AppointmentVO> responseEnv = new ResponseEnvelope<>(appointmentVO,true);
 		return responseEnv;
@@ -112,12 +129,12 @@ public class AppointmentRestApiController {
 	 * @return
 	 */
 	@PostMapping(value = "/core/backend/appointment")
-	public ResponseEnvelope<Integer> createAppointmentByBackend(@RequestBody AppointmentVO appointmentVO){
+	public ResponseEnvelope<Long> createAppointmentByBackend(@RequestBody AppointmentVO appointmentVO){
 		AppointmentModel appointmentModel = beanMapper.map(appointmentVO, AppointmentModel.class);
 		appointmentModel.setSource(AppointmentModel.SOURCE_BACKEDN);
 		appointmentModel.setVisitPlans(JSON.toJSONString(appointmentVO.getVisitPlanIds()));
 		Integer  result = appointmentService.createSelective(appointmentModel);
-		ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<>(result,true);
+		ResponseEnvelope<Long> responseEnv = new ResponseEnvelope<>(appointmentModel.getId(),true);
 		return responseEnv;
 	}
 

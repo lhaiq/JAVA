@@ -107,6 +107,26 @@ public class DoctorConfigServiceImpl implements DoctorConfigService {
 		return jdbcTemplate.queryForList(sql,simpleDateFormat.format(new Date()));
 	}
 
+	@Override
+	public List<Map<String, Object>> selectConfigById(Long id) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String sql="SELECT\n" +
+				"  dc.id,\n" +
+				"  dc.doctor_id   AS doctorId,\n" +
+				"  d.real_name   AS realName,\n" +
+				"  d.hospital_name   AS hospitalName,\n" +
+				"  dc.hospital_id AS hospitalId,\n" +
+				"  dc.date,\n" +
+				"  dc.day_of_week AS dayOfWeek,\n" +
+				"  dc.`interval`,\n" +
+				"  dc.start_time  AS startTime,\n" +
+				"  dc.end_time    AS endTime,\n" +
+				"  dc.status\n" +
+				"FROM doctor_config dc, doctor d\n" +
+				"WHERE dc.doctor_id = d.id AND d.id = ? AND dc.date >=? ORDER BY dc.date asc";
+		return jdbcTemplate.queryForList(sql,id,simpleDateFormat.format(new Date()));
+	}
+
 	@Transactional
 	@Override
 	public int updateByPrimaryKey(DoctorConfigModel doctorConfigModel) {

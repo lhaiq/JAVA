@@ -27,6 +27,7 @@ public interface DoctorConfigService {
     List<DoctorConfigModel> selectPage(DoctorConfigModel doctorConfigModel, Pageable pageable);
 
     List<Map<String, Object>> selectConfigByName(String name);
+    List<Map<String, Object>> selectConfigById(Long id);
 
 
 }

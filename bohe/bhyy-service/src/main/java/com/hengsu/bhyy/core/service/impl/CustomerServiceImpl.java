@@ -10,15 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -42,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public int createSelective(CustomerModel customerModel) {
+        customerModel.setCreateTime(new Date());
         Customer customer = beanMapper.map(customerModel, Customer.class);
         int retVal = customerRepo.insertSelective(customer);
         customerModel.setId(customer.getId());
@@ -153,6 +153,15 @@ public class CustomerServiceImpl implements CustomerService {
             condition.append(" and c.phone like '%" + param.get("phone") + "%'");
         }
 
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
+        }
+
         StringBuffer limitSql = new StringBuffer();
         if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
             limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
@@ -217,5 +226,7 @@ public class CustomerServiceImpl implements CustomerService {
     public int updateByPrimaryKeySelective(CustomerModel customerModel) {
         return customerRepo.updateByPrimaryKeySelective(beanMapper.map(customerModel, Customer.class));
     }
+
+
 
 }

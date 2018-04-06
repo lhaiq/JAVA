@@ -8,16 +8,18 @@ public class CaseReportModel{
 	
 	private Long id;
 	private Long appointId;
+	private Long billId;
 	private Long customerId;
 	private Long patientId;
 	private Long doctorId;
-	private Long itemClassId;
 	private Long categoryId;
 	private Integer type;
 	private Integer status;
 	private Integer caseType;
-	private Integer itemType;
 	private Date createTime;
+	private Integer isSend;
+	private String time;
+	private Long hospitalId;
 	private String content;
 		
 	public void setId(Long id){
@@ -34,6 +36,14 @@ public class CaseReportModel{
 	
 	public Long getAppointId(){
 		return this.appointId;
+	}
+		
+	public void setBillId(Long billId){
+		this.billId = billId;
+	}
+	
+	public Long getBillId(){
+		return this.billId;
 	}
 		
 	public void setCustomerId(Long customerId){
@@ -58,14 +68,6 @@ public class CaseReportModel{
 	
 	public Long getDoctorId(){
 		return this.doctorId;
-	}
-		
-	public void setItemClassId(Long itemClassId){
-		this.itemClassId = itemClassId;
-	}
-	
-	public Long getItemClassId(){
-		return this.itemClassId;
 	}
 		
 	public void setCategoryId(Long categoryId){
@@ -100,20 +102,36 @@ public class CaseReportModel{
 		return this.caseType;
 	}
 		
-	public void setItemType(Integer itemType){
-		this.itemType = itemType;
-	}
-	
-	public Integer getItemType(){
-		return this.itemType;
-	}
-		
 	public void setCreateTime(Date createTime){
 		this.createTime = createTime;
 	}
 	
 	public Date getCreateTime(){
 		return this.createTime;
+	}
+		
+	public void setIsSend(Integer isSend){
+		this.isSend = isSend;
+	}
+	
+	public Integer getIsSend(){
+		return this.isSend;
+	}
+		
+	public void setTime(String time){
+		this.time = time;
+	}
+	
+	public String getTime(){
+		return this.time;
+	}
+		
+	public void setHospitalId(Long hospitalId){
+		this.hospitalId = hospitalId;
+	}
+	
+	public Long getHospitalId(){
+		return this.hospitalId;
 	}
 		
 	public void setContent(String content){

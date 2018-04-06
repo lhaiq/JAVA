@@ -1,29 +1,25 @@
 package com.hengsu.bhyy.core.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.hengsu.bhyy.core.entity.Doctor;
+import com.hengsu.bhyy.core.model.DoctorInviteLogModel;
+import com.hengsu.bhyy.core.model.DoctorModel;
 import com.hengsu.bhyy.core.model.WalletModel;
-import com.hengsu.bhyy.core.service.BillService;
-import com.hengsu.bhyy.core.service.CustomerService;
-import com.hengsu.bhyy.core.service.WalletService;
+import com.hengsu.bhyy.core.repository.DoctorRepository;
+import com.hengsu.bhyy.core.service.*;
+import com.wlw.pylon.core.beans.mapping.BeanMapper;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.Pageable;
-
-import com.hengsu.bhyy.core.entity.Doctor;
-import com.hengsu.bhyy.core.repository.DoctorRepository;
-import com.hengsu.bhyy.core.model.DoctorModel;
-import com.hengsu.bhyy.core.service.DoctorService;
-import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +44,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private DoctorInviteLogService doctorInviteLogService;
 
     @Transactional
     @Override
@@ -159,6 +158,15 @@ public class DoctorServiceImpl implements DoctorService {
 
         }
 
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
+        }
+
         StringBuffer limitSql = new StringBuffer();
         if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
             limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
@@ -173,7 +181,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Page<Map<String, Object>> searchPageForApp(List<Long> dayOfWeek, String name, String itemName, Pageable pageable) {
+    public Page<Map<String, Object>> searchPageForApp(List<Long> dayOfWeek, String name, String itemName,Integer isRecommend, Pageable pageable) {
 
         String select = "SELECT d.id,d.real_name as realName,d.hospital_name as hospitalName,d.icon,d.education,d.is_recommend as isRecommend ";
 
@@ -203,7 +211,12 @@ public class DoctorServiceImpl implements DoctorService {
             condition.append(" and d.service_item like '%" + itemName + "%'");
         }
 
-        condition.append("and d.status =1 ");
+        if (null!=isRecommend) {
+            condition.append(" and d.is_recommend = "+isRecommend);
+        }
+
+        condition.append(" and d.status =1 ");
+        condition.append(" order by d.rank desc ");
 
 
         StringBuffer limitSql = new StringBuffer();
@@ -240,6 +253,20 @@ public class DoctorServiceImpl implements DoctorService {
         String customerSql = "update customer set pay_money = pay_money + ? where id = ?";
         jdbcTemplate.update(customerSql, money, id);
 
+
+    }
+
+    @Transactional
+    @Override
+    public Long scan(Long id) {
+        DoctorModel doctorModel = new DoctorModel();
+        doctorModel.setInviteId(id);
+        doctorModel.setSource(1);
+        createSelective(doctorModel);
+
+        //邀请日志
+        doctorInviteLogService.add(doctorModel.getId(),"已获得邀请链接");
+        return doctorModel.getId();
 
     }
 

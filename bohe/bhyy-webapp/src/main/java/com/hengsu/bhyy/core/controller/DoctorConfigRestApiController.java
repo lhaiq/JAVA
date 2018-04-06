@@ -157,4 +157,11 @@ public class DoctorConfigRestApiController {
 		ResponseEnvelope<List<Map<String, Object>>> responseEnv = new ResponseEnvelope<>(mapList,true);
 		return responseEnv;
 	}
+
+	@GetMapping(value = "/core/doctorConfig/id")
+	public ResponseEnvelope<List<Map<String, Object>>> selectConfigByName(@RequestParam("id") Long id) throws Exception{
+		List<Map<String, Object>> mapList = doctorConfigService.selectConfigById(id);
+		ResponseEnvelope<List<Map<String, Object>>> responseEnv = new ResponseEnvelope<>(mapList,true);
+		return responseEnv;
+	}
 }

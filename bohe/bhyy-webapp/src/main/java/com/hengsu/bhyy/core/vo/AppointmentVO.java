@@ -10,13 +10,41 @@ public class AppointmentVO{
 	private Long id;
 	private Long doctorId;
 	private String doctorName;
+	private String doctorPhone;
+
+	public String getDoctorPhone() {
+		return doctorPhone;
+	}
+
+	public void setDoctorPhone(String doctorPhone) {
+		this.doctorPhone = doctorPhone;
+	}
+
+	public String getCustomerPhone() {
+		return customerPhone;
+	}
+
+	public void setCustomerPhone(String customerPhone) {
+		this.customerPhone = customerPhone;
+	}
+
+	public String getPatientPhone() {
+		return patientPhone;
+	}
+
+	public void setPatientPhone(String patientPhone) {
+		this.patientPhone = patientPhone;
+	}
+
 	private Long doctorConfigId;
 	private Integer timeBucket;
 	private Long itemClassId;
 	private Long customerId;
 	private String customerName;
+	private String customerPhone;
 	private Long patientId;
 	private String patientName;
+	private String patientPhone;
 	private String time;
 	private Integer type;
 	private Integer status;

@@ -55,4 +55,15 @@ public class WalletRestApiController {
     }
 
 
+	@GetMapping(value = "/core/wallet/month")
+	public ResponseEnvelope<Page<WalletModel>> listWalletByMonth(@RequestAttribute("userId") Long doctorId,
+																 @RequestParam("month") String month,
+														  Pageable pageable){
+		List<WalletModel> walletModelModels = walletService.selectByMonth(doctorId,month,pageable);
+		Page<WalletModel> page = new PageImpl<>(walletModelModels,pageable,0);
+		ResponseEnvelope<Page<WalletModel>> responseEnv = new ResponseEnvelope<>(page,true);
+		return responseEnv;
+	}
+
+
 }

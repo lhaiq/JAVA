@@ -2,26 +2,28 @@ package com.hengsu.bhyy.core.service.impl;
 
 import com.hengsu.bhyy.core.RandomUtil;
 import com.hengsu.bhyy.core.entity.Bill;
-import com.hengsu.bhyy.core.model.AppointmentModel;
-import com.hengsu.bhyy.core.model.BillItemModel;
-import com.hengsu.bhyy.core.model.BillModel;
-import com.hengsu.bhyy.core.model.ItemModel;
+import com.hengsu.bhyy.core.model.*;
 import com.hengsu.bhyy.core.repository.BillRepository;
 import com.hengsu.bhyy.core.service.*;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -142,6 +144,15 @@ public class BillServiceImpl implements BillService {
         }
 
 
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
+        }
+
         StringBuffer limitSql = new StringBuffer();
         if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
             limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
@@ -150,6 +161,24 @@ public class BillServiceImpl implements BillService {
 
         List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables + condition.toString() + limitSql.toString());
         Long count = jdbcTemplate.queryForObject("select count(*) " + tables + condition.toString(), Long.class);
+
+
+        //绑定头像
+        if(CollectionUtils.isNotEmpty(content)){
+            List<Long> customerIds = content.stream().map(e->Long.parseLong(e.get("customerId").toString())).collect(Collectors.toList());
+            String sql= "SELECT id,icon\n" +
+                    "FROM customer WHERE id in("+StringUtils.join(customerIds,",")+") ";
+            List<CustomerModel> results = jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(CustomerModel.class));
+            Map<Long,String> idIcons = results.stream().filter(e->e.getIcon()!=null).collect(Collectors.toMap(CustomerModel::getId, CustomerModel::getIcon));
+            content.stream().forEach(e->{
+                Long customerId = Long.parseLong(e.get("customerId").toString());
+                if(idIcons.containsKey(customerId)){
+                    e.put("customerIcon",idIcons.get(customerId).toString());
+                }
+
+            });
+
+        }
 
         Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
         return page;
@@ -229,6 +258,15 @@ public class BillServiceImpl implements BillService {
 
         if (StringUtils.isNotEmpty(param.get("hospitalName"))) {
             condition.append(" and b.hospital_name LIKE '%" + param.get("hospitalName") + "%'");
+        }
+
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
         }
 
         StringBuffer limitSql = new StringBuffer();

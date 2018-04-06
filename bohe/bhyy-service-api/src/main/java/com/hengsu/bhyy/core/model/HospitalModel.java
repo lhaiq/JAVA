@@ -9,9 +9,9 @@ public class HospitalModel{
 	private Long id;
 	private String name;
 	private String brand;
-	private Integer prov;
-	private Integer city;
-	private Integer area;
+	private String prov;
+	private String city;
+	private String area;
 	private String telephone;
 	private String address;
 	private String route;
@@ -28,7 +28,37 @@ public class HospitalModel{
 	private Integer isEnable;
 	private Date createTime;
 	private Integer rank;
-		
+	private String img1;
+
+	private String img2;
+
+	private String img3;
+
+
+	public String getImg1() {
+		return img1;
+	}
+
+	public void setImg1(String img1) {
+		this.img1 = img1;
+	}
+
+	public String getImg2() {
+		return img2;
+	}
+
+	public void setImg2(String img2) {
+		this.img2 = img2;
+	}
+
+	public String getImg3() {
+		return img3;
+	}
+
+	public void setImg3(String img3) {
+		this.img3 = img3;
+	}
+
 	public void setId(Long id){
 		this.id = id;
 	}
@@ -53,27 +83,27 @@ public class HospitalModel{
 		return this.brand;
 	}
 		
-	public void setProv(Integer prov){
+	public void setProv(String prov){
 		this.prov = prov;
 	}
 	
-	public Integer getProv(){
+	public String getProv(){
 		return this.prov;
 	}
 		
-	public void setCity(Integer city){
+	public void setCity(String city){
 		this.city = city;
 	}
 	
-	public Integer getCity(){
+	public String getCity(){
 		return this.city;
 	}
 		
-	public void setArea(Integer area){
+	public void setArea(String area){
 		this.area = area;
 	}
 	
-	public Integer getArea(){
+	public String getArea(){
 		return this.area;
 	}
 		
@@ -124,15 +154,15 @@ public class HospitalModel{
 	public String getLeaderPhone(){
 		return this.leaderPhone;
 	}
-
-	public void setBoheJoin(String boheJoin) {
+		
+	public void setBoheJoin(String boheJoin){
 		this.boheJoin = boheJoin;
 	}
-
-	public String getBoheJoin() {
-		return boheJoin;
+	
+	public String getBoheJoin(){
+		return this.boheJoin;
 	}
-
+		
 	public void setEstablishDate(Date establishDate){
 		this.establishDate = establishDate;
 	}

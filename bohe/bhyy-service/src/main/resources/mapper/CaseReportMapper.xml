@@ -4,23 +4,25 @@
   <resultMap id="BaseResultMap" type="com.hengsu.bhyy.core.entity.CaseReport">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="appoint_id" jdbcType="BIGINT" property="appointId" />
+    <result column="bill_id" jdbcType="BIGINT" property="billId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="patient_id" jdbcType="BIGINT" property="patientId" />
     <result column="doctor_id" jdbcType="BIGINT" property="doctorId" />
-    <result column="item_class_id" jdbcType="BIGINT" property="itemClassId" />
     <result column="category_id" jdbcType="BIGINT" property="categoryId" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="case_type" jdbcType="INTEGER" property="caseType" />
-    <result column="item_type" jdbcType="INTEGER" property="itemType" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_send" jdbcType="INTEGER" property="isSend" />
+    <result column="time" jdbcType="VARCHAR" property="time" />
+    <result column="hospital_id" jdbcType="BIGINT" property="hospitalId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hengsu.bhyy.core.entity.CaseReport">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, appoint_id, customer_id, patient_id, doctor_id, item_class_id, category_id, type, 
-    status, case_type, item_type, create_time
+    id, appoint_id, bill_id, customer_id, patient_id, doctor_id, category_id, type, status, 
+    case_type, create_time, is_send, time, hospital_id
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -38,16 +40,18 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
-    insert into case_report (id, appoint_id, customer_id, 
-      patient_id, doctor_id, item_class_id, 
+    insert into case_report (id, appoint_id, bill_id, 
+      customer_id, patient_id, doctor_id, 
       category_id, type, status, 
-      case_type, item_type, create_time, 
-      content)
-    values (#{id,jdbcType=BIGINT}, #{appointId,jdbcType=BIGINT}, #{customerId,jdbcType=BIGINT}, 
-      #{patientId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, #{itemClassId,jdbcType=BIGINT}, 
+      case_type, create_time, is_send, 
+      time, hospital_id, content
+      )
+    values (#{id,jdbcType=BIGINT}, #{appointId,jdbcType=BIGINT}, #{billId,jdbcType=BIGINT}, 
+      #{customerId,jdbcType=BIGINT}, #{patientId,jdbcType=BIGINT}, #{doctorId,jdbcType=BIGINT}, 
       #{categoryId,jdbcType=BIGINT}, #{type,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
-      #{caseType,jdbcType=INTEGER}, #{itemType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{caseType,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isSend,jdbcType=INTEGER}, 
+      #{time,jdbcType=VARCHAR}, #{hospitalId,jdbcType=BIGINT}, #{content,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
     insert into case_report
@@ -58,6 +62,9 @@
       <if test="appointId != null">
         appoint_id,
       </if>
+      <if test="billId != null">
+        bill_id,
+      </if>
       <if test="customerId != null">
         customer_id,
       </if>
@@ -66,9 +73,6 @@
       </if>
       <if test="doctorId != null">
         doctor_id,
-      </if>
-      <if test="itemClassId != null">
-        item_class_id,
       </if>
       <if test="categoryId != null">
         category_id,
@@ -82,11 +86,17 @@
       <if test="caseType != null">
         case_type,
       </if>
-      <if test="itemType != null">
-        item_type,
-      </if>
       <if test="createTime != null">
         create_time,
+      </if>
+      <if test="isSend != null">
+        is_send,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="hospitalId != null">
+        hospital_id,
       </if>
       <if test="content != null">
         content,
@@ -99,6 +109,9 @@
       <if test="appointId != null">
         #{appointId,jdbcType=BIGINT},
       </if>
+      <if test="billId != null">
+        #{billId,jdbcType=BIGINT},
+      </if>
       <if test="customerId != null">
         #{customerId,jdbcType=BIGINT},
       </if>
@@ -107,9 +120,6 @@
       </if>
       <if test="doctorId != null">
         #{doctorId,jdbcType=BIGINT},
-      </if>
-      <if test="itemClassId != null">
-        #{itemClassId,jdbcType=BIGINT},
       </if>
       <if test="categoryId != null">
         #{categoryId,jdbcType=BIGINT},
@@ -123,11 +133,17 @@
       <if test="caseType != null">
         #{caseType,jdbcType=INTEGER},
       </if>
-      <if test="itemType != null">
-        #{itemType,jdbcType=INTEGER},
-      </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSend != null">
+        #{isSend,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalId != null">
+        #{hospitalId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
@@ -140,6 +156,9 @@
       <if test="appointId != null">
         appoint_id = #{appointId,jdbcType=BIGINT},
       </if>
+      <if test="billId != null">
+        bill_id = #{billId,jdbcType=BIGINT},
+      </if>
       <if test="customerId != null">
         customer_id = #{customerId,jdbcType=BIGINT},
       </if>
@@ -148,9 +167,6 @@
       </if>
       <if test="doctorId != null">
         doctor_id = #{doctorId,jdbcType=BIGINT},
-      </if>
-      <if test="itemClassId != null">
-        item_class_id = #{itemClassId,jdbcType=BIGINT},
       </if>
       <if test="categoryId != null">
         category_id = #{categoryId,jdbcType=BIGINT},
@@ -164,11 +180,17 @@
       <if test="caseType != null">
         case_type = #{caseType,jdbcType=INTEGER},
       </if>
-      <if test="itemType != null">
-        item_type = #{itemType,jdbcType=INTEGER},
-      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isSend != null">
+        is_send = #{isSend,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="hospitalId != null">
+        hospital_id = #{hospitalId,jdbcType=BIGINT},
       </if>
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
@@ -179,32 +201,36 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
     update case_report
     set appoint_id = #{appointId,jdbcType=BIGINT},
+      bill_id = #{billId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       patient_id = #{patientId,jdbcType=BIGINT},
       doctor_id = #{doctorId,jdbcType=BIGINT},
-      item_class_id = #{itemClassId,jdbcType=BIGINT},
       category_id = #{categoryId,jdbcType=BIGINT},
       type = #{type,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       case_type = #{caseType,jdbcType=INTEGER},
-      item_type = #{itemType,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_send = #{isSend,jdbcType=INTEGER},
+      time = #{time,jdbcType=VARCHAR},
+      hospital_id = #{hospitalId,jdbcType=BIGINT},
       content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.hengsu.bhyy.core.entity.CaseReport">
     update case_report
     set appoint_id = #{appointId,jdbcType=BIGINT},
+      bill_id = #{billId,jdbcType=BIGINT},
       customer_id = #{customerId,jdbcType=BIGINT},
       patient_id = #{patientId,jdbcType=BIGINT},
       doctor_id = #{doctorId,jdbcType=BIGINT},
-      item_class_id = #{itemClassId,jdbcType=BIGINT},
       category_id = #{categoryId,jdbcType=BIGINT},
       type = #{type,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
       case_type = #{caseType,jdbcType=INTEGER},
-      item_type = #{itemType,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_send = #{isSend,jdbcType=INTEGER},
+      time = #{time,jdbcType=VARCHAR},
+      hospital_id = #{hospitalId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.CaseReport" resultType="java.lang.Integer">
@@ -216,6 +242,9 @@
       <if test="appointId != null">
         and appoint_id = #{appointId,jdbcType=BIGINT}
       </if>
+      <if test="billId != null">
+        and bill_id = #{billId,jdbcType=BIGINT}
+      </if>
       <if test="customerId != null">
         and customer_id = #{customerId,jdbcType=BIGINT}
       </if>
@@ -224,9 +253,6 @@
       </if>
       <if test="doctorId != null">
         and doctor_id = #{doctorId,jdbcType=BIGINT}
-      </if>
-      <if test="itemClassId != null">
-        and item_class_id = #{itemClassId,jdbcType=BIGINT}
       </if>
       <if test="categoryId != null">
         and category_id = #{categoryId,jdbcType=BIGINT}
@@ -240,11 +266,17 @@
       <if test="caseType != null">
         and case_type = #{caseType,jdbcType=INTEGER}
       </if>
-      <if test="itemType != null">
-        and item_type = #{itemType,jdbcType=INTEGER}
-      </if>
       <if test="createTime != null">
         and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="isSend != null">
+        and is_send = #{isSend,jdbcType=INTEGER}
+      </if>
+      <if test="time != null">
+        and time = #{time,jdbcType=VARCHAR}
+      </if>
+      <if test="hospitalId != null">
+        and hospital_id = #{hospitalId,jdbcType=BIGINT}
       </if>
       <if test="content != null">
         and content = #{content,jdbcType=LONGVARCHAR}
@@ -261,6 +293,9 @@
     <if test="param1.appointId != null">
       and appoint_id = #{param1.appointId,jdbcType=BIGINT}
     </if>
+    <if test="param1.billId != null">
+      and bill_id = #{param1.billId,jdbcType=BIGINT}
+    </if>
     <if test="param1.customerId != null">
       and customer_id = #{param1.customerId,jdbcType=BIGINT}
     </if>
@@ -269,9 +304,6 @@
     </if>
     <if test="param1.doctorId != null">
       and doctor_id = #{param1.doctorId,jdbcType=BIGINT}
-    </if>
-    <if test="param1.itemClassId != null">
-      and item_class_id = #{param1.itemClassId,jdbcType=BIGINT}
     </if>
     <if test="param1.categoryId != null">
       and category_id = #{param1.categoryId,jdbcType=BIGINT}
@@ -285,11 +317,17 @@
     <if test="param1.caseType != null">
       and case_type = #{param1.caseType,jdbcType=INTEGER}
     </if>
-    <if test="param1.itemType != null">
-      and item_type = #{param1.itemType,jdbcType=INTEGER}
-    </if>
     <if test="param1.createTime != null">
       and create_time = #{param1.createTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.isSend != null">
+      and is_send = #{param1.isSend,jdbcType=INTEGER}
+    </if>
+    <if test="param1.time != null">
+      and time = #{param1.time,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.hospitalId != null">
+      and hospital_id = #{param1.hospitalId,jdbcType=BIGINT}
     </if>
     <if test="param1.content != null">
       and content = #{param1.content,jdbcType=LONGVARCHAR}

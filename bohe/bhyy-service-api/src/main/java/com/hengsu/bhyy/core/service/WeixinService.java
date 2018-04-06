@@ -1,6 +1,9 @@
 package com.hengsu.bhyy.core.service;
 
 
+import com.hengsu.bhyy.core.model.WeixinConfigModel;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,4 +12,6 @@ import java.util.Map;
 public interface WeixinService {
 
     Map<String,Object> getWeixinConfig(String url);
+
+    WeixinConfigModel getWeixinConfigModel();
 }

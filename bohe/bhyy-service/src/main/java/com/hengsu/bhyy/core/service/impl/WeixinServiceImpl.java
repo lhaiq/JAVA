@@ -3,7 +3,6 @@ package com.hengsu.bhyy.core.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.hengsu.bhyy.core.model.WeixinConfigModel;
 import com.hengsu.bhyy.core.service.WeixinService;
-import org.eclipse.core.internal.preferences.ImmutableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Formatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by haiquan.li on 18/3/2.
@@ -87,6 +83,13 @@ public class WeixinServiceImpl implements WeixinService {
         }
 
         return null;
+    }
+
+    @Override
+    public WeixinConfigModel getWeixinConfigModel() {
+        String sql="SELECT app_id as appId,access_token as accessToken,timestamp \n" +
+                "FROM weixin_config;";
+        return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(WeixinConfigModel.class)).get(0);
     }
 
     private WeixinConfigModel getWeixinConfigFromDb() {

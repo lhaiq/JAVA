@@ -27,4 +27,6 @@ public interface SysRoleService {
 
     List<SysRoleModel> selectPage(SysRoleModel sysRoleModel, Pageable pageable);
 
+    SysRoleModel findByUserId(Long userId);
+
 }

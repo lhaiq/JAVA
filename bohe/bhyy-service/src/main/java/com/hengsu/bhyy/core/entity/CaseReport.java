@@ -7,13 +7,13 @@ public class CaseReport {
 
     private Long appointId;
 
+    private Long billId;
+
     private Long customerId;
 
     private Long patientId;
 
     private Long doctorId;
-
-    private Long itemClassId;
 
     private Long categoryId;
 
@@ -23,9 +23,13 @@ public class CaseReport {
 
     private Integer caseType;
 
-    private Integer itemType;
-
     private Date createTime;
+
+    private Integer isSend;
+
+    private String time;
+
+    private Long hospitalId;
 
     private String content;
 
@@ -43,6 +47,14 @@ public class CaseReport {
 
     public void setAppointId(Long appointId) {
         this.appointId = appointId;
+    }
+
+    public Long getBillId() {
+        return billId;
+    }
+
+    public void setBillId(Long billId) {
+        this.billId = billId;
     }
 
     public Long getCustomerId() {
@@ -67,14 +79,6 @@ public class CaseReport {
 
     public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
-    }
-
-    public Long getItemClassId() {
-        return itemClassId;
-    }
-
-    public void setItemClassId(Long itemClassId) {
-        this.itemClassId = itemClassId;
     }
 
     public Long getCategoryId() {
@@ -109,20 +113,36 @@ public class CaseReport {
         this.caseType = caseType;
     }
 
-    public Integer getItemType() {
-        return itemType;
-    }
-
-    public void setItemType(Integer itemType) {
-        this.itemType = itemType;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(Integer isSend) {
+        this.isSend = isSend;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public Long getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(Long hospitalId) {
+        this.hospitalId = hospitalId;
     }
 
     public String getContent() {

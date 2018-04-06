@@ -1,10 +1,13 @@
 package com.hengsu.bhyy.core.service.impl;
 
+import com.hengsu.bhyy.core.HRErrorCode;
+import com.hengsu.bhyy.core.service.ItemService;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ import com.hengsu.bhyy.core.service.ItemClassService;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,101 +28,127 @@ import java.util.Map;
 @Service
 public class ItemClassServiceImpl implements ItemClassService {
 
-	@Autowired
-	private BeanMapper beanMapper;
+    @Autowired
+    private BeanMapper beanMapper;
 
-	@Autowired
-	private ItemClassRepository itemClassRepo;
+    @Autowired
+    private ItemClassRepository itemClassRepo;
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private ItemService itemService;
 
-	@Transactional
-	@Override
-	public int create(ItemClassModel itemClassModel) {
-		return itemClassRepo.insert(beanMapper.map(itemClassModel, ItemClass.class));
-	}
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
-	@Transactional
-	@Override
-	public int createSelective(ItemClassModel itemClassModel) {
-		return itemClassRepo.insertSelective(beanMapper.map(itemClassModel, ItemClass.class));
-	}
+    @Transactional
+    @Override
+    public int create(ItemClassModel itemClassModel) {
+        return itemClassRepo.insert(beanMapper.map(itemClassModel, ItemClass.class));
+    }
 
-	@Transactional
-	@Override
-	public int deleteByPrimaryKey(Long id) {
-		return itemClassRepo.deleteByPrimaryKey(id);
-	}
+    @Transactional
+    @Override
+    public int createSelective(ItemClassModel itemClassModel) {
+        return itemClassRepo.insertSelective(beanMapper.map(itemClassModel, ItemClass.class));
+    }
 
-	@Transactional(readOnly = true)
-	@Override
-	public ItemClassModel findByPrimaryKey(Long id) {
-		ItemClass itemClass = itemClassRepo.selectByPrimaryKey(id);
-		return beanMapper.map(itemClass, ItemClassModel.class);
-	}
+    @Transactional
+    @Override
+    public int deleteByPrimaryKey(Long id) {
 
-	@Transactional(readOnly = true)
-	@Override
-	public long selectCount(ItemClassModel itemClassModel) {
-		return itemClassRepo.selectCount(beanMapper.map(itemClassModel, ItemClass.class));
-	}
+        ItemClassModel itemClassModel = findByPrimaryKey(id);
+        String type = " doctor_class ";
+        if (1 == itemClassModel.getType()) {
+            type = " patient_class ";
+        }
 
-	@Transactional(readOnly = true)
-	@Override
-	public List<ItemClassModel> selectPage(ItemClassModel itemClassModel,Pageable pageable) {
-		ItemClass itemClass = beanMapper.map(itemClassModel, ItemClass.class);
-		return beanMapper.mapAsList(itemClassRepo.selectPage(itemClass,pageable),ItemClassModel.class);
-	}
+        String sql = "SELECT count(*)\n" +
+                "FROM item where " + type + "=?";
+        Long count = jdbcTemplate.queryForObject(sql, Long.class, id);
+        if (count > 0) {
+            HRErrorCode.throwBusinessException(HRErrorCode.ErrorCode("6001", "有关联子项目不能删除"));
+        }
 
-	@Override
-	public Page<Map<String, Object>> selectByType(int type,String name, Pageable pageable) {
+        return itemClassRepo.deleteByPrimaryKey(id);
+    }
 
-		String mainType = "patient_class";
-		if(type==0){
-			mainType="doctor_class";
-		}
+    @Transactional(readOnly = true)
+    @Override
+    public ItemClassModel findByPrimaryKey(Long id) {
+        ItemClass itemClass = itemClassRepo.selectByPrimaryKey(id);
+        return beanMapper.map(itemClass, ItemClassModel.class);
+    }
 
-		String select = "SELECT ic.id,ic.class_name as className,ic.create_time as createTime,ic.type,ic.status\n" +
-				"  ,ic.rank,ifnull(t.count,0) as childCount ";
+    @Transactional(readOnly = true)
+    @Override
+    public long selectCount(ItemClassModel itemClassModel) {
+        return itemClassRepo.selectCount(beanMapper.map(itemClassModel, ItemClass.class));
+    }
 
-		String tables = " FROM item_class ic LEFT JOIN (\n" +
-				"  SELECT "+mainType+",count(*) as count\n" +
-				"FROM item GROUP BY "+mainType+"\n" +
-				"  ) t on ic.id=t."+mainType;
+    @Transactional(readOnly = true)
+    @Override
+    public List<ItemClassModel> selectPage(ItemClassModel itemClassModel, Pageable pageable) {
+        ItemClass itemClass = beanMapper.map(itemClassModel, ItemClass.class);
+        return beanMapper.mapAsList(itemClassRepo.selectPage(itemClass, pageable), ItemClassModel.class);
+    }
 
-		tables+=" WHERE ic.TYPE = "+type ;
+    @Override
+    public Page<Map<String, Object>> selectByType(int type, String name, Pageable pageable) {
 
-		if(StringUtils.isNotEmpty(name)){
-			tables+=" and ic.class_name LIKE '%"+name+"%'";
-		}
+        String mainType = "patient_class";
+        if (type == 0) {
+            mainType = "doctor_class";
+        }
 
-		tables+=" ORDER BY  ic.rank DESC ";
+        String select = "SELECT ic.id,ic.class_name as className,ic.create_time as createTime,ic.type,ic.status\n" +
+                "  ,ic.rank,ifnull(t.count,0) as childCount ";
+
+        String tables = " FROM item_class ic LEFT JOIN (\n" +
+                "  SELECT " + mainType + ",count(*) as count\n" +
+                "FROM item GROUP BY " + mainType + "\n" +
+                "  ) t on ic.id=t." + mainType;
+
+        tables += " WHERE ic.TYPE = " + type;
+
+        if (StringUtils.isNotEmpty(name)) {
+            tables += " and ic.class_name LIKE '%" + name + "%'";
+        }
+
+        if (null != pageable.getSort()) {
+            tables += " order by ";
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            tables += StringUtils.join(sortStr, ",");
+        } else {
+            tables += " ORDER BY  ic.rank DESC ";
+        }
 
 
-		StringBuffer limitSql = new StringBuffer();
-		if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
-			limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
-		}
+        StringBuffer limitSql = new StringBuffer();
+        if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
+            limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
+        }
 
 
-		List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables  + limitSql.toString());
-		Long count = jdbcTemplate.queryForObject("select count(*) " + tables, Long.class);
-		Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
+        List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables + limitSql.toString());
+        Long count = jdbcTemplate.queryForObject("select count(*) " + tables, Long.class);
+        Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
 
-		return page;
-	}
+        return page;
+    }
 
-	@Transactional
-	@Override
-	public int updateByPrimaryKey(ItemClassModel itemClassModel) {
-		return itemClassRepo.updateByPrimaryKey(beanMapper.map(itemClassModel, ItemClass.class));
-	}
-	
-	@Transactional
-	@Override
-	public int updateByPrimaryKeySelective(ItemClassModel itemClassModel) {
-		return itemClassRepo.updateByPrimaryKeySelective(beanMapper.map(itemClassModel, ItemClass.class));
-	}
+    @Transactional
+    @Override
+    public int updateByPrimaryKey(ItemClassModel itemClassModel) {
+        return itemClassRepo.updateByPrimaryKey(beanMapper.map(itemClassModel, ItemClass.class));
+    }
+
+    @Transactional
+    @Override
+    public int updateByPrimaryKeySelective(ItemClassModel itemClassModel) {
+        return itemClassRepo.updateByPrimaryKeySelective(beanMapper.map(itemClassModel, ItemClass.class));
+    }
 
 }

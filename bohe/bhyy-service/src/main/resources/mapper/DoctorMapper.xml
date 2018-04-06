@@ -20,6 +20,7 @@
     <result column="job_icon1" jdbcType="VARCHAR" property="jobIcon1" />
     <result column="job_icon2" jdbcType="VARCHAR" property="jobIcon2" />
     <result column="assistant_qr" jdbcType="VARCHAR" property="assistantQr" />
+    <result column="assistant_name" jdbcType="VARCHAR" property="assistantName" />
     <result column="add_date" jdbcType="DATE" property="addDate" />
     <result column="doctor_icon" jdbcType="VARCHAR" property="doctorIcon" />
     <result column="status" jdbcType="INTEGER" property="status" />
@@ -28,17 +29,17 @@
     <result column="is_show" jdbcType="INTEGER" property="isShow" />
     <result column="source" jdbcType="INTEGER" property="source" />
     <result column="failure_reason" jdbcType="VARCHAR" property="failureReason" />
-    <result column="is_recommend" jdbcType="INTEGER" property="isRecommend" />
-    <result column="invite_code" jdbcType="VARCHAR" property="inviteCode" />
-    <result column="recommend_id" jdbcType="BIGINT" property="recommendId" />
+    <result column="is_send" jdbcType="INTEGER" property="isSend" />
+    <result column="invite_id" jdbcType="BIGINT" property="inviteId" />
     <result column="rank" jdbcType="INTEGER" property="rank" />
     <result column="failure_time" jdbcType="TIMESTAMP" property="failureTime" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
   </resultMap>
   <sql id="Base_Column_List">
     id, real_name, phone, icon, gender, birthday, hospital_name, department, title, adept, 
     education, work_year, intro, balance, id_icon, job_icon1, job_icon2, assistant_qr, 
-    add_date, doctor_icon, status, age, service_item, is_show, source, failure_reason, 
-    is_recommend, invite_code, recommend_id, rank, failure_time
+    assistant_name, add_date, doctor_icon, status, age, service_item, is_show, source, 
+    failure_reason, is_send, invite_id, rank, failure_time, open_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -57,22 +58,22 @@
       adept, education, work_year, 
       intro, balance, id_icon, 
       job_icon1, job_icon2, assistant_qr, 
-      add_date, doctor_icon, status, 
-      age, service_item, is_show, 
-      source, failure_reason, is_recommend, 
-      invite_code, recommend_id, rank, 
-      failure_time)
+      assistant_name, add_date, doctor_icon, 
+      status, age, service_item, 
+      is_show, source, failure_reason, 
+      is_send, invite_id, rank, 
+      failure_time, open_id)
     values (#{id,jdbcType=BIGINT}, #{realName,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
       #{icon,jdbcType=VARCHAR}, #{gender,jdbcType=INTEGER}, #{birthday,jdbcType=DATE}, 
       #{hospitalName,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{adept,jdbcType=VARCHAR}, #{education,jdbcType=VARCHAR}, #{workYear,jdbcType=INTEGER}, 
       #{intro,jdbcType=VARCHAR}, #{balance,jdbcType=DECIMAL}, #{idIcon,jdbcType=VARCHAR}, 
       #{jobIcon1,jdbcType=VARCHAR}, #{jobIcon2,jdbcType=VARCHAR}, #{assistantQr,jdbcType=VARCHAR}, 
-      #{addDate,jdbcType=DATE}, #{doctorIcon,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{age,jdbcType=INTEGER}, #{serviceItem,jdbcType=VARCHAR}, #{isShow,jdbcType=INTEGER}, 
-      #{source,jdbcType=INTEGER}, #{failureReason,jdbcType=VARCHAR}, #{isRecommend,jdbcType=INTEGER}, 
-      #{inviteCode,jdbcType=VARCHAR}, #{recommendId,jdbcType=BIGINT}, #{rank,jdbcType=INTEGER}, 
-      #{failureTime,jdbcType=TIMESTAMP})
+      #{assistantName,jdbcType=VARCHAR}, #{addDate,jdbcType=DATE}, #{doctorIcon,jdbcType=VARCHAR}, 
+      #{status,jdbcType=INTEGER}, #{age,jdbcType=INTEGER}, #{serviceItem,jdbcType=VARCHAR}, 
+      #{isShow,jdbcType=INTEGER}, #{source,jdbcType=INTEGER}, #{failureReason,jdbcType=VARCHAR}, 
+      #{isSend,jdbcType=INTEGER}, #{inviteId,jdbcType=BIGINT}, #{rank,jdbcType=INTEGER}, 
+      #{failureTime,jdbcType=TIMESTAMP}, #{openId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Doctor" keyProperty="id" useGeneratedKeys="true">
     insert into doctor
@@ -131,6 +132,9 @@
       <if test="assistantQr != null">
         assistant_qr,
       </if>
+      <if test="assistantName != null">
+        assistant_name,
+      </if>
       <if test="addDate != null">
         add_date,
       </if>
@@ -155,20 +159,20 @@
       <if test="failureReason != null">
         failure_reason,
       </if>
-      <if test="isRecommend != null">
-        is_recommend,
+      <if test="isSend != null">
+        is_send,
       </if>
-      <if test="inviteCode != null">
-        invite_code,
-      </if>
-      <if test="recommendId != null">
-        recommend_id,
+      <if test="inviteId != null">
+        invite_id,
       </if>
       <if test="rank != null">
         rank,
       </if>
       <if test="failureTime != null">
         failure_time,
+      </if>
+      <if test="openId != null">
+        open_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -226,6 +230,9 @@
       <if test="assistantQr != null">
         #{assistantQr,jdbcType=VARCHAR},
       </if>
+      <if test="assistantName != null">
+        #{assistantName,jdbcType=VARCHAR},
+      </if>
       <if test="addDate != null">
         #{addDate,jdbcType=DATE},
       </if>
@@ -250,20 +257,20 @@
       <if test="failureReason != null">
         #{failureReason,jdbcType=VARCHAR},
       </if>
-      <if test="isRecommend != null">
-        #{isRecommend,jdbcType=INTEGER},
+      <if test="isSend != null">
+        #{isSend,jdbcType=INTEGER},
       </if>
-      <if test="inviteCode != null">
-        #{inviteCode,jdbcType=VARCHAR},
-      </if>
-      <if test="recommendId != null">
-        #{recommendId,jdbcType=BIGINT},
+      <if test="inviteId != null">
+        #{inviteId,jdbcType=BIGINT},
       </if>
       <if test="rank != null">
         #{rank,jdbcType=INTEGER},
       </if>
       <if test="failureTime != null">
         #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openId != null">
+        #{openId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -321,6 +328,9 @@
       <if test="assistantQr != null">
         assistant_qr = #{assistantQr,jdbcType=VARCHAR},
       </if>
+      <if test="assistantName != null">
+        assistant_name = #{assistantName,jdbcType=VARCHAR},
+      </if>
       <if test="addDate != null">
         add_date = #{addDate,jdbcType=DATE},
       </if>
@@ -345,20 +355,20 @@
       <if test="failureReason != null">
         failure_reason = #{failureReason,jdbcType=VARCHAR},
       </if>
-      <if test="isRecommend != null">
-        is_recommend = #{isRecommend,jdbcType=INTEGER},
+      <if test="isSend != null">
+        is_send = #{isSend,jdbcType=INTEGER},
       </if>
-      <if test="inviteCode != null">
-        invite_code = #{inviteCode,jdbcType=VARCHAR},
-      </if>
-      <if test="recommendId != null">
-        recommend_id = #{recommendId,jdbcType=BIGINT},
+      <if test="inviteId != null">
+        invite_id = #{inviteId,jdbcType=BIGINT},
       </if>
       <if test="rank != null">
         rank = #{rank,jdbcType=INTEGER},
       </if>
       <if test="failureTime != null">
         failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="openId != null">
+        open_id = #{openId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -382,6 +392,7 @@
       job_icon1 = #{jobIcon1,jdbcType=VARCHAR},
       job_icon2 = #{jobIcon2,jdbcType=VARCHAR},
       assistant_qr = #{assistantQr,jdbcType=VARCHAR},
+      assistant_name = #{assistantName,jdbcType=VARCHAR},
       add_date = #{addDate,jdbcType=DATE},
       doctor_icon = #{doctorIcon,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
@@ -390,11 +401,11 @@
       is_show = #{isShow,jdbcType=INTEGER},
       source = #{source,jdbcType=INTEGER},
       failure_reason = #{failureReason,jdbcType=VARCHAR},
-      is_recommend = #{isRecommend,jdbcType=INTEGER},
-      invite_code = #{inviteCode,jdbcType=VARCHAR},
-      recommend_id = #{recommendId,jdbcType=BIGINT},
+      is_send = #{isSend,jdbcType=INTEGER},
+      invite_id = #{inviteId,jdbcType=BIGINT},
       rank = #{rank,jdbcType=INTEGER},
-      failure_time = #{failureTime,jdbcType=TIMESTAMP}
+      failure_time = #{failureTime,jdbcType=TIMESTAMP},
+      open_id = #{openId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Doctor" resultType="java.lang.Integer">
@@ -454,6 +465,9 @@
       <if test="assistantQr != null">
         and assistant_qr = #{assistantQr,jdbcType=VARCHAR}
       </if>
+      <if test="assistantName != null">
+        and assistant_name = #{assistantName,jdbcType=VARCHAR}
+      </if>
       <if test="addDate != null">
         and add_date = #{addDate,jdbcType=DATE}
       </if>
@@ -478,20 +492,20 @@
       <if test="failureReason != null">
         and failure_reason = #{failureReason,jdbcType=VARCHAR}
       </if>
-      <if test="isRecommend != null">
-        and is_recommend = #{isRecommend,jdbcType=INTEGER}
+      <if test="isSend != null">
+        and is_send = #{isSend,jdbcType=INTEGER}
       </if>
-      <if test="inviteCode != null">
-        and invite_code = #{inviteCode,jdbcType=VARCHAR}
-      </if>
-      <if test="recommendId != null">
-        and recommend_id = #{recommendId,jdbcType=BIGINT}
+      <if test="inviteId != null">
+        and invite_id = #{inviteId,jdbcType=BIGINT}
       </if>
       <if test="rank != null">
         and rank = #{rank,jdbcType=INTEGER}
       </if>
       <if test="failureTime != null">
         and failure_time = #{failureTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="openId != null">
+        and open_id = #{openId,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
@@ -553,6 +567,9 @@
     <if test="param1.assistantQr != null">
       and assistant_qr = #{param1.assistantQr,jdbcType=VARCHAR}
     </if>
+    <if test="param1.assistantName != null">
+      and assistant_name = #{param1.assistantName,jdbcType=VARCHAR}
+    </if>
     <if test="param1.addDate != null">
       and add_date = #{param1.addDate,jdbcType=DATE}
     </if>
@@ -577,20 +594,20 @@
     <if test="param1.failureReason != null">
       and failure_reason = #{param1.failureReason,jdbcType=VARCHAR}
     </if>
-    <if test="param1.isRecommend != null">
-      and is_recommend = #{param1.isRecommend,jdbcType=INTEGER}
+    <if test="param1.isSend != null">
+      and is_send = #{param1.isSend,jdbcType=INTEGER}
     </if>
-    <if test="param1.inviteCode != null">
-      and invite_code = #{param1.inviteCode,jdbcType=VARCHAR}
-    </if>
-    <if test="param1.recommendId != null">
-      and recommend_id = #{param1.recommendId,jdbcType=BIGINT}
+    <if test="param1.inviteId != null">
+      and invite_id = #{param1.inviteId,jdbcType=BIGINT}
     </if>
     <if test="param1.rank != null">
       and rank = #{param1.rank,jdbcType=INTEGER}
     </if>
     <if test="param1.failureTime != null">
       and failure_time = #{param1.failureTime,jdbcType=TIMESTAMP}
+    </if>
+    <if test="param1.openId != null">
+      and open_id = #{param1.openId,jdbcType=VARCHAR}
     </if>
     <if test="param2.sort != null">
       order by 

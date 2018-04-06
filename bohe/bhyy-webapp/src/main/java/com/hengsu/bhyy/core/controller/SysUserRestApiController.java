@@ -4,8 +4,9 @@ import com.google.common.cache.Cache;
 import com.hengsu.bhyy.core.HRErrorCode;
 import com.hengsu.bhyy.core.RandomUtil;
 import com.hengsu.bhyy.core.annotation.IgnoreAuth;
-import com.hengsu.bhyy.core.model.DoctorModel;
-import com.hengsu.bhyy.core.model.SessionUserModel;
+import com.hengsu.bhyy.core.model.*;
+import com.hengsu.bhyy.core.service.SysMenuService;
+import com.hengsu.bhyy.core.service.SysRoleService;
 import com.hengsu.bhyy.core.vo.DoctorVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -28,11 +29,11 @@ import com.wlw.pylon.web.rest.ResponseEnvelope;
 import com.wlw.pylon.web.rest.annotation.RestApiController;
 
 import com.hengsu.bhyy.core.service.SysUserService;
-import com.hengsu.bhyy.core.model.SysUserModel;
 import com.hengsu.bhyy.core.vo.SysUserVO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/bhyy")
@@ -49,6 +50,13 @@ public class SysUserRestApiController {
 	@Autowired
 	@Qualifier("sessionCache")
 	private Cache<String, SessionUserModel> sessionCache;
+
+	@Autowired
+	private SysRoleService sysRoleService;
+
+	@Autowired
+	private SysMenuService sysMenuService;
+
 
 
 	@GetMapping(value = "/core/sysUser/{id}")
@@ -136,6 +144,14 @@ public class SysUserRestApiController {
 
 		SysUserVO sysUserVO = beanMapper.map(sysUserModel, SysUserVO.class);
 		sysUserVO.setSessionId(sessionId);
+
+		//查询角色与权限
+		SysRoleModel sysRoleModel = sysRoleService.findByUserId(sysUserModel.getId());
+		sysUserVO.setRoleId(sysRoleModel.getId());
+		sysUserVO.setRoleName(sysRoleModel.getName());
+		List<SysMenuModel> sysMenuModels = sysMenuService.selectByRoleId(sysRoleModel.getId());
+		List<Long> menuIds = sysMenuModels.stream().map(e->e.getId()).collect(Collectors.toList());
+		sysUserVO.setMenuIds(menuIds);
 		ResponseEnvelope<SysUserVO> responseEnv = new ResponseEnvelope<>(sysUserVO, true);
 		return responseEnv;
 	}

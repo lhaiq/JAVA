@@ -3,24 +3,27 @@ package com.hengsu.bhyy.core.service;
 
 import com.hengsu.bhyy.core.model.SysMenuModel;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
-public interface SysMenuService{
+public interface SysMenuService {
 
-public int create(SysMenuModel sysMenuModel);
+    int create(SysMenuModel sysMenuModel);
 
-public int createSelective(SysMenuModel sysMenuModel);
+    int createSelective(SysMenuModel sysMenuModel);
 
-public SysMenuModel findByPrimaryKey(Long id);
+    SysMenuModel findByPrimaryKey(Long id);
 
-public int updateByPrimaryKey(SysMenuModel sysMenuModel);
+    int updateByPrimaryKey(SysMenuModel sysMenuModel);
 
-public int updateByPrimaryKeySelective(SysMenuModel sysMenuModel);
+    int updateByPrimaryKeySelective(SysMenuModel sysMenuModel);
 
-public int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long id);
 
-public long selectCount(SysMenuModel sysMenuModel);
+    long selectCount(SysMenuModel sysMenuModel);
 
-public List<SysMenuModel> selectPage(SysMenuModel sysMenuModel, Pageable pageable);
+    List<SysMenuModel> selectPage(SysMenuModel sysMenuModel, Pageable pageable);
+
+    List<SysMenuModel> selectByRoleId(Long roleId);
 
 }

@@ -9,17 +9,16 @@ import com.hengsu.bhyy.core.service.DoctorService;
 import com.hengsu.bhyy.core.service.ReferralLogService;
 import com.hengsu.bhyy.core.service.ReferralService;
 import com.hengsu.bhyy.core.vo.ReferralLogVO;
+import com.hengsu.bhyy.core.vo.ReferralSearchVO;
 import com.hengsu.bhyy.core.vo.ReferralVO;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 import com.wlw.pylon.web.rest.ResponseEnvelope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.web.bind.annotation.*;
+import scala.Int;
 
 import java.util.List;
 import java.util.Map;
@@ -79,6 +78,38 @@ public class ReferralRestApiController {
         return responseEnv;
     }
 
+    /**
+     * 转诊中
+     * @param referralSearchVO
+     * @param pageable
+     * @return
+     */
+    @PostMapping(value = "/core/referraling")
+    public ResponseEnvelope<Page<Map<String, Object>>> referraling(@RequestAttribute("userId") Long userId,
+            @RequestBody ReferralSearchVO referralSearchVO, Pageable pageable) {
+        Page<Map<String, Object>> page = referralService.selectReferralingPage(userId,referralSearchVO.getStatuses(),referralSearchVO.getStartDate(),
+                referralSearchVO.getEndDate(), pageable);
+        ResponseEnvelope<Page<Map<String, Object>>> responseEnv = new ResponseEnvelope<>(page, true);
+        return responseEnv;
+    }
+
+
+    /**
+     * 转诊成功
+     * @param referralSearchVO
+     * @param pageable
+     * @return
+     */
+    @PostMapping(value = "/core/referraled")
+    public ResponseEnvelope<Map<String, Object>> referraled(@RequestAttribute("userId") Long userId,
+            @RequestBody ReferralSearchVO referralSearchVO,  Pageable pageable) {
+        Map<String, Object> map = referralService.selectReferraledPage(userId,referralSearchVO.getStatuses(),referralSearchVO.getStartDate(),
+                referralSearchVO.getEndDate(), pageable);
+        ResponseEnvelope<Map<String, Object>> responseEnv = new ResponseEnvelope<>(map, true);
+        return responseEnv;
+    }
+
+
 
     /**
      * 扫描
@@ -133,13 +164,15 @@ public class ReferralRestApiController {
             CustomerModel customerModel = customerService.findByPrimaryKey(referralModel.getCustomerId());
             referralVO.setCustomerName(customerModel.getRealName());
             referralVO.setCustomerPhone(customerModel.getPhone());
+            referralVO.setCustomerIcon(customerModel.getIcon());
         }
 
         DoctorModel doctorModel = doctorService.findByPrimaryKey(referralModel.getDoctorId());
         referralVO.setDoctorName(doctorModel.getRealName());
+        referralVO.setDoctorIcon(doctorModel.getDoctorIcon());
         ReferralLogModel param = new ReferralLogModel();
         param.setReferralId(id);
-        List<ReferralLogModel> referralLogModels = referralLogService.selectPage(param,new PageRequest(0,Integer.MAX_VALUE));
+        List<ReferralLogModel> referralLogModels = referralLogService.selectPage(param,new PageRequest(0,Integer.MAX_VALUE, Sort.Direction.DESC,"create_time"));
         List<ReferralLogVO> referralLogVOs = beanMapper.mapAsList(referralLogModels,ReferralLogVO.class);
         referralVO.setLogs(referralLogVOs);
         ResponseEnvelope<ReferralVO> responseEnv = new ResponseEnvelope<>(referralVO, true);

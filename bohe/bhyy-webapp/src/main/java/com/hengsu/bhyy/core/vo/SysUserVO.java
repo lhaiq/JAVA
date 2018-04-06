@@ -17,7 +17,15 @@ public class SysUserVO{
 	private Long roleId;
 	private String roleName;
 	private String sessionId;
+	private List<Long> menuIds;
 
+	public void setMenuIds(List<Long> menuIds) {
+		this.menuIds = menuIds;
+	}
+
+	public List<Long> getMenuIds() {
+		return menuIds;
+	}
 
 	public void setId(Long id){
 		this.id = id;

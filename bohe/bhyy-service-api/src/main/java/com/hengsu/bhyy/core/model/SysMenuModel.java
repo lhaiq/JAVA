@@ -11,8 +11,9 @@ public class SysMenuModel{
 	private Long parentId;
 	private Integer rank;
 	private String icon;
+	private String key;
+	private String controller;
 
-		
 	public void setId(Long id){
 		this.id = id;
 	}
@@ -59,6 +60,22 @@ public class SysMenuModel{
 	
 	public String getIcon(){
 		return this.icon;
+	}
+		
+	public void setKey(String key){
+		this.key = key;
+	}
+	
+	public String getKey(){
+		return this.key;
+	}
+		
+	public void setController(String controller){
+		this.controller = controller;
+	}
+	
+	public String getController(){
+		return this.controller;
 	}
 		
 		

@@ -5,10 +5,8 @@ import com.google.common.collect.ImmutableMap;
 import com.hengsu.bhyy.core.HRErrorCode;
 import com.hengsu.bhyy.core.RandomUtil;
 import com.hengsu.bhyy.core.annotation.IgnoreAuth;
-import com.hengsu.bhyy.core.model.DoctorModel;
-import com.hengsu.bhyy.core.model.SessionUserModel;
-import com.hengsu.bhyy.core.service.DoctorService;
-import com.hengsu.bhyy.core.service.SmsService;
+import com.hengsu.bhyy.core.model.*;
+import com.hengsu.bhyy.core.service.*;
 import com.hengsu.bhyy.core.vo.DoctorVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,8 +28,6 @@ import com.wlw.pylon.core.beans.mapping.BeanMapper;
 import com.wlw.pylon.web.rest.ResponseEnvelope;
 import com.wlw.pylon.web.rest.annotation.RestApiController;
 
-import com.hengsu.bhyy.core.service.CustomerService;
-import com.hengsu.bhyy.core.model.CustomerModel;
 import com.hengsu.bhyy.core.vo.CustomerVO;
 
 import java.util.List;
@@ -62,6 +58,12 @@ public class CustomerRestApiController {
 
     @Autowired
     private SmsService smsService;
+
+    @Autowired
+    private ReferralRelationService referralRelationService;
+
+    @Autowired
+    private ReferralService referralService;
 
     @Value("${sms.templateCode}")
     private String templateCode;
@@ -202,6 +204,10 @@ public class CustomerRestApiController {
             customerModel = new CustomerModel();
             customerModel.setPhone(phone);
             customerService.createSelective(customerModel);
+            if(requestParam.containsKey("referralId")){
+                Long referralId = Long.parseLong(requestParam.get("referralId").toString());
+                referralService.bindCustomerAfterRegister(referralId,customerModel.getId(),"已注册成为薄荷牙医会员");
+            }
         } else {
             customerModel = customerModels.get(0);
         }

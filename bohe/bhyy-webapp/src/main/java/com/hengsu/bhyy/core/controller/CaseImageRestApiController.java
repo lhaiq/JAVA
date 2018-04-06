@@ -20,6 +20,7 @@ import com.hengsu.bhyy.core.model.CaseImageModel;
 import com.hengsu.bhyy.core.vo.CaseImageVO;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/bhyy")
@@ -52,12 +53,32 @@ public class CaseImageRestApiController {
         return responseEnv;
     }
 
+
+//	@GetMapping(value = "/core/customer/caseImage")
+//	public ResponseEnvelope<Page<CaseImageModel>> customerCaseImage(@RequestAttribute("userId") Long userId,Pageable pageable){
+//
+//		CaseImageModel param = beanMapper.map(caseImageVO, CaseImageModel.class);
+//		List<CaseImageModel> caseImageModelModels = caseImageService.selectPage(param,pageable);
+//		long count=caseImageService.selectCount(param);
+//		Page<CaseImageModel> page = new PageImpl<>(caseImageModelModels,pageable,count);
+//		ResponseEnvelope<Page<CaseImageModel>> responseEnv = new ResponseEnvelope<>(page,true);
+//		return responseEnv;
+//	}
+
 	@PostMapping(value = "/core/caseImage")
 	public ResponseEnvelope<Integer> createCaseImage(@RequestBody CaseImageVO caseImageVO){
 		CaseImageModel caseImageModel = beanMapper.map(caseImageVO, CaseImageModel.class);
 		Integer  result = caseImageService.create(caseImageModel);
 		ResponseEnvelope<Integer> responseEnv = new ResponseEnvelope<>(result,true);
         return responseEnv;
+	}
+
+	@PostMapping(value = "/core/caseImage/search")
+	public ResponseEnvelope<Page<Map<String, Object>>> searchCaseImage(@RequestBody Map<String, String> param,
+																	Pageable pageable) {
+		Page<Map<String, Object>> page = caseImageService.searchPage(param, pageable);
+		ResponseEnvelope<Page<Map<String, Object>>> responseEnv = new ResponseEnvelope<>(page, true);
+		return responseEnv;
 	}
 
     @DeleteMapping(value = "/core/caseImage/{id}")

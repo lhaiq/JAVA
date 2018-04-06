@@ -10,6 +10,7 @@ public class DoctorSearchVO {
     private List<Long> dayOfWeek;
     private String name;
     private String itemName;
+    private Integer isRecommend;
 
 
     public List<Long> getDayOfWeek() {
@@ -34,5 +35,13 @@ public class DoctorSearchVO {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public void setIsRecommend(Integer isRecommend) {
+        this.isRecommend = isRecommend;
+    }
+
+    public Integer getIsRecommend() {
+        return isRecommend;
     }
 }

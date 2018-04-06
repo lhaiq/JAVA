@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import com.hengsu.bhyy.core.model.HospitalModel;
 import com.hengsu.bhyy.core.service.HospitalService;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -85,11 +87,15 @@ public class HospitalServiceImpl implements HospitalService {
 		}
 
 		if (StringUtils.isNotEmpty(param.get("city"))) {
-			condition.append(" and city=" + param.get("city") + "");
+			condition.append(" and city='" + param.get("city") + "'");
 		}
 
 		if (StringUtils.isNotEmpty(param.get("area"))) {
-			condition.append(" and area=" + param.get("area"));
+			condition.append(" and area='" + param.get("area")+"'");
+		}
+
+		if (StringUtils.isNotEmpty(param.get("isEnable"))) {
+			condition.append(" and is_enable=" + param.get("isEnable"));
 		}
 
 		if (StringUtils.isNotEmpty(param.get("telephone"))) {
@@ -109,8 +115,21 @@ public class HospitalServiceImpl implements HospitalService {
 			condition.append(" and name like '%" + param.get("name") + "%'");
 		}
 
+		if (StringUtils.isNotEmpty(param.get("leader"))) {
+			condition.append(" and leader like '%" + param.get("leader") + "%'");
+		}
+
 		if (StringUtils.isNotEmpty(param.get("boheJoin"))) {
 			condition.append(" and bohe_join like '%" + param.get("boheJoin") + "%'");
+		}
+
+		if (null != pageable.getSort()) {
+			condition.append(" order by ");
+			List<String> sortStr = new ArrayList<>();
+			for (Sort.Order order : pageable.getSort()) {
+				sortStr.add(order.getProperty() + " " + order.getDirection());
+			}
+			condition.append(StringUtils.join(sortStr, ","));
 		}
 
 

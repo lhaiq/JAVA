@@ -1,5 +1,8 @@
 package com.hengsu.bhyy.core.controller;
 
+import com.hengsu.bhyy.core.entity.ItemClass;
+import com.hengsu.bhyy.core.model.ItemModel;
+import com.hengsu.bhyy.core.service.ItemService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +38,7 @@ public class ItemClassRestApiController {
 
 	@Autowired
 	private ItemClassService itemClassService;
+
 
 	@GetMapping(value = "/core/itemClass/{id}")
 	public ResponseEnvelope<ItemClassVO> getItemClassById(@PathVariable Long id){
@@ -87,6 +91,7 @@ public class ItemClassRestApiController {
     @PutMapping(value = "/core/itemClass/{id}")
 	public ResponseEnvelope<Integer> updateItemClassByPrimaryKeySelective(@PathVariable Long id,
 					@RequestBody ItemClassVO itemClassVO){
+
 		ItemClassModel itemClassModel = beanMapper.map(itemClassVO, ItemClassModel.class);
 		itemClassModel.setId(id);
 		Integer  result = itemClassService.updateByPrimaryKeySelective(itemClassModel);

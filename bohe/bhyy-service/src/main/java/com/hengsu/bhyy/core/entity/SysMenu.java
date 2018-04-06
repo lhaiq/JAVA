@@ -13,6 +13,10 @@ public class SysMenu {
 
     private String icon;
 
+    private String key;
+
+    private String controller;
+
     public Long getId() {
         return id;
     }
@@ -59,5 +63,21 @@ public class SysMenu {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getController() {
+        return controller;
+    }
+
+    public void setController(String controller) {
+        this.controller = controller;
     }
 }

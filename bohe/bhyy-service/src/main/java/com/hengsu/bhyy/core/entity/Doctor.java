@@ -53,17 +53,36 @@ public class Doctor {
 
     private String failureReason;
 
-    private Integer isRecommend;
+    private Integer isSend;
 
-    private String inviteCode;
+    private Long inviteId;
 
-    private Long recommendId;
 
     private Integer rank;
 
     private String assistantQr;
 
     private Date failureTime;
+
+    private String openId;
+
+    private String assistantName;
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getAssistantName() {
+        return assistantName;
+    }
+
+    public void setAssistantName(String assistantName) {
+        this.assistantName = assistantName;
+    }
 
     public void setFailureTime(Date failureTime) {
         this.failureTime = failureTime;
@@ -265,28 +284,20 @@ public class Doctor {
         this.failureReason = failureReason;
     }
 
-    public Integer getIsRecommend() {
-        return isRecommend;
+    public void setIsSend(Integer isSend) {
+        this.isSend = isSend;
     }
 
-    public void setIsRecommend(Integer isRecommend) {
-        this.isRecommend = isRecommend;
+    public Integer getIsSend() {
+        return isSend;
     }
 
-    public String getInviteCode() {
-        return inviteCode;
+    public void setInviteId(Long inviteId) {
+        this.inviteId = inviteId;
     }
 
-    public void setInviteCode(String inviteCode) {
-        this.inviteCode = inviteCode;
-    }
-
-    public Long getRecommendId() {
-        return recommendId;
-    }
-
-    public void setRecommendId(Long recommendId) {
-        this.recommendId = recommendId;
+    public Long getInviteId() {
+        return inviteId;
     }
 
     public Integer getRank() {

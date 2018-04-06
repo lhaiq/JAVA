@@ -30,4 +30,6 @@ public interface DoctorRecommendService {
 
     List<Map<String, Object>> selectRecommends(Long presenter);
 
+    void addRecommends(Long presenter,List<Long> presentees);
+
 }

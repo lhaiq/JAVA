@@ -5,9 +5,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="brand" jdbcType="VARCHAR" property="brand" />
-    <result column="prov" jdbcType="INTEGER" property="prov" />
-    <result column="city" jdbcType="INTEGER" property="city" />
-    <result column="area" jdbcType="INTEGER" property="area" />
+    <result column="prov" jdbcType="VARCHAR" property="prov" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
     <result column="telephone" jdbcType="VARCHAR" property="telephone" />
     <result column="address" jdbcType="VARCHAR" property="address" />
     <result column="route" jdbcType="VARCHAR" property="route" />
@@ -24,11 +24,14 @@
     <result column="is_enable" jdbcType="INTEGER" property="isEnable" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="rank" jdbcType="INTEGER" property="rank" />
+    <result column="img1" jdbcType="VARCHAR" property="img1" />
+    <result column="img2" jdbcType="VARCHAR" property="img2" />
+    <result column="img3" jdbcType="VARCHAR" property="img3" />
   </resultMap>
   <sql id="Base_Column_List">
     id, name, brand, prov, city, area, telephone, address, route, tooth_chair_num, leader, 
     leader_phone, bohe_join, establish_date, staff_num, password, hos_qualificat, eia_qualificat, 
-    account, is_enable, create_time, rank
+    account, is_enable, create_time, rank, img1, img2, img3
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -47,18 +50,18 @@
       leader, leader_phone, bohe_join, 
       establish_date, staff_num, password, 
       hos_qualificat, eia_qualificat, account, 
-      is_enable, create_time, rank
-      )
+      is_enable, create_time, rank, 
+      img1, img2, img3)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, 
-      #{prov,jdbcType=INTEGER}, #{city,jdbcType=INTEGER}, #{area,jdbcType=INTEGER}, #{telephone,jdbcType=VARCHAR}, 
+      #{prov,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{telephone,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{route,jdbcType=VARCHAR}, #{toothChairNum,jdbcType=INTEGER}, 
-      #{leader,jdbcType=VARCHAR}, #{leaderPhone,jdbcType=VARCHAR}, #{boheJoin,jdbcType=VARCHAR},
+      #{leader,jdbcType=VARCHAR}, #{leaderPhone,jdbcType=VARCHAR}, #{boheJoin,jdbcType=VARCHAR}, 
       #{establishDate,jdbcType=DATE}, #{staffNum,jdbcType=INTEGER}, #{password,jdbcType=VARCHAR}, 
       #{hosQualificat,jdbcType=VARCHAR}, #{eiaQualificat,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
-      #{isEnable,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{rank,jdbcType=INTEGER}
-      )
+      #{isEnable,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{rank,jdbcType=INTEGER}, 
+      #{img1,jdbcType=VARCHAR}, #{img2,jdbcType=VARCHAR}, #{img3,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Hospital">
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Hospital" useGeneratedKeys="true" keyProperty="id">
     insert into hospital
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -127,6 +130,15 @@
       <if test="rank != null">
         rank,
       </if>
+      <if test="img1 != null">
+        img1,
+      </if>
+      <if test="img2 != null">
+        img2,
+      </if>
+      <if test="img3 != null">
+        img3,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -139,13 +151,13 @@
         #{brand,jdbcType=VARCHAR},
       </if>
       <if test="prov != null">
-        #{prov,jdbcType=INTEGER},
+        #{prov,jdbcType=VARCHAR},
       </if>
       <if test="city != null">
-        #{city,jdbcType=INTEGER},
+        #{city,jdbcType=VARCHAR},
       </if>
       <if test="area != null">
-        #{area,jdbcType=INTEGER},
+        #{area,jdbcType=VARCHAR},
       </if>
       <if test="telephone != null">
         #{telephone,jdbcType=VARCHAR},
@@ -195,6 +207,15 @@
       <if test="rank != null">
         #{rank,jdbcType=INTEGER},
       </if>
+      <if test="img1 != null">
+        #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        #{img3,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.hengsu.bhyy.core.entity.Hospital">
@@ -207,13 +228,13 @@
         brand = #{brand,jdbcType=VARCHAR},
       </if>
       <if test="prov != null">
-        prov = #{prov,jdbcType=INTEGER},
+        prov = #{prov,jdbcType=VARCHAR},
       </if>
       <if test="city != null">
-        city = #{city,jdbcType=INTEGER},
+        city = #{city,jdbcType=VARCHAR},
       </if>
       <if test="area != null">
-        area = #{area,jdbcType=INTEGER},
+        area = #{area,jdbcType=VARCHAR},
       </if>
       <if test="telephone != null">
         telephone = #{telephone,jdbcType=VARCHAR},
@@ -263,6 +284,15 @@
       <if test="rank != null">
         rank = #{rank,jdbcType=INTEGER},
       </if>
+      <if test="img1 != null">
+        img1 = #{img1,jdbcType=VARCHAR},
+      </if>
+      <if test="img2 != null">
+        img2 = #{img2,jdbcType=VARCHAR},
+      </if>
+      <if test="img3 != null">
+        img3 = #{img3,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -270,9 +300,9 @@
     update hospital
     set name = #{name,jdbcType=VARCHAR},
       brand = #{brand,jdbcType=VARCHAR},
-      prov = #{prov,jdbcType=INTEGER},
-      city = #{city,jdbcType=INTEGER},
-      area = #{area,jdbcType=INTEGER},
+      prov = #{prov,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
       telephone = #{telephone,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
       route = #{route,jdbcType=VARCHAR},
@@ -288,7 +318,10 @@
       account = #{account,jdbcType=VARCHAR},
       is_enable = #{isEnable,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      rank = #{rank,jdbcType=INTEGER}
+      rank = #{rank,jdbcType=INTEGER},
+      img1 = #{img1,jdbcType=VARCHAR},
+      img2 = #{img2,jdbcType=VARCHAR},
+      img3 = #{img3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.Hospital" resultType="java.lang.Integer">
@@ -304,13 +337,13 @@
         and brand = #{brand,jdbcType=VARCHAR}
       </if>
       <if test="prov != null">
-        and prov = #{prov,jdbcType=INTEGER}
+        and prov = #{prov,jdbcType=VARCHAR}
       </if>
       <if test="city != null">
-        and city = #{city,jdbcType=INTEGER}
+        and city = #{city,jdbcType=VARCHAR}
       </if>
       <if test="area != null">
-        and area = #{area,jdbcType=INTEGER}
+        and area = #{area,jdbcType=VARCHAR}
       </if>
       <if test="telephone != null">
         and telephone = #{telephone,jdbcType=VARCHAR}
@@ -360,6 +393,15 @@
       <if test="rank != null">
         and rank = #{rank,jdbcType=INTEGER}
       </if>
+      <if test="img1 != null">
+        and img1 = #{img1,jdbcType=VARCHAR}
+      </if>
+      <if test="img2 != null">
+        and img2 = #{img2,jdbcType=VARCHAR}
+      </if>
+      <if test="img3 != null">
+        and img3 = #{img3,jdbcType=VARCHAR}
+      </if>
     </where>
   </select>
   <select id="selectPage" resultMap="BaseResultMap">
@@ -376,13 +418,13 @@
       and brand = #{param1.brand,jdbcType=VARCHAR}
     </if>
     <if test="param1.prov != null">
-      and prov = #{param1.prov,jdbcType=INTEGER}
+      and prov = #{param1.prov,jdbcType=VARCHAR}
     </if>
     <if test="param1.city != null">
-      and city = #{param1.city,jdbcType=INTEGER}
+      and city = #{param1.city,jdbcType=VARCHAR}
     </if>
     <if test="param1.area != null">
-      and area = #{param1.area,jdbcType=INTEGER}
+      and area = #{param1.area,jdbcType=VARCHAR}
     </if>
     <if test="param1.telephone != null">
       and telephone = #{param1.telephone,jdbcType=VARCHAR}
@@ -431,6 +473,15 @@
     </if>
     <if test="param1.rank != null">
       and rank = #{param1.rank,jdbcType=INTEGER}
+    </if>
+    <if test="param1.img1 != null">
+      and img1 = #{param1.img1,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.img2 != null">
+      and img2 = #{param1.img2,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.img3 != null">
+      and img3 = #{param1.img3,jdbcType=VARCHAR}
     </if>
     <if test="param2.sort != null">
       order by 

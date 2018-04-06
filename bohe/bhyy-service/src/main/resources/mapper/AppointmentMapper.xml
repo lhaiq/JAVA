@@ -63,7 +63,7 @@
       #{createTime,jdbcType=TIMESTAMP}, #{snapshot,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Appointment">
+  <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.Appointment" keyProperty="id" useGeneratedKeys="true">
     insert into appointment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

@@ -84,6 +84,10 @@ public class CommentTagServiceImpl implements CommentTagService {
 			condition.append(" and c.status=" + param.get("status"));
 		}
 
+		if (StringUtils.isNotEmpty(param.get("typeId"))) {
+			condition.append(" and c.type_id=" + param.get("typeId"));
+		}
+
 
 		if (StringUtils.isNotEmpty(param.get("startTime"))) {
 			condition.append(" and c.create_time > '" + param.get("startTime")+"'");

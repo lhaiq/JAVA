@@ -11,15 +11,13 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +99,7 @@ public class SysUserServiceImpl implements SysUserService {
 
     @Override
     public Page<Map<String, Object>> searchPage(Map<String, String> param, Pageable pageable) {
-        String select = "SELECT su.id,su.real_name as realName,su.phone,su.create_time as createTime,sr.id as roleId,sr.name as roleName ";
+        String select = "SELECT su.id,su.real_name as realName,su.username,su.phone,su.create_time as createTime,sr.id as roleId,sr.name as roleName ";
 
         String tables = " FROM sys_user su,sys_user_role sur,sys_role  sr ";
 
@@ -130,8 +128,20 @@ public class SysUserServiceImpl implements SysUserService {
         }
 
 
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
+        }else {
+            condition.append(" order by su.id desc ");
+        }
+
+
         StringBuffer limitSql = new StringBuffer();
-        limitSql.append(" order by su.id desc ");
+
         if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
             limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
         }

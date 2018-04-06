@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import com.hengsu.bhyy.core.model.BannerModel;
 import com.hengsu.bhyy.core.service.BannerService;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -97,6 +99,14 @@ public class BannerServiceImpl implements BannerService {
 			condition.append(" and b.name like '%" + param.get("name") + "%'");
 		}
 
+		if (null != pageable.getSort()) {
+			condition.append(" order by ");
+			List<String> sortStr = new ArrayList<>();
+			for (Sort.Order order : pageable.getSort()) {
+				sortStr.add(order.getProperty() + " " + order.getDirection());
+			}
+			condition.append(StringUtils.join(sortStr, ","));
+		}
 
 		StringBuffer limitSql = new StringBuffer();
 		if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {

@@ -1,14 +1,15 @@
 package com.hengsu.bhyy.core.service.impl;
 
-import com.hengsu.bhyy.core.model.DoctorModel;
-import com.hengsu.bhyy.core.model.ReferralLogModel;
-import com.hengsu.bhyy.core.service.DoctorService;
-import com.hengsu.bhyy.core.service.ReferralLogService;
+import com.hengsu.bhyy.core.model.*;
+import com.hengsu.bhyy.core.service.*;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,14 +17,12 @@ import org.springframework.data.domain.Pageable;
 
 import com.hengsu.bhyy.core.entity.Referral;
 import com.hengsu.bhyy.core.repository.ReferralRepository;
-import com.hengsu.bhyy.core.model.ReferralModel;
-import com.hengsu.bhyy.core.service.ReferralService;
 import com.wlw.pylon.core.beans.mapping.BeanMapper;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ReferralServiceImpl implements ReferralService {
@@ -39,6 +38,12 @@ public class ReferralServiceImpl implements ReferralService {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private ReferralRelationService referralRelationService;
+
+    @Autowired
+    private BillService billService;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -87,7 +92,19 @@ public class ReferralServiceImpl implements ReferralService {
     @Transactional
     @Override
     public void scan(ReferralModel referralModel) {
-//		if(null==referralModel.getCustomerId()){
+
+        if (null != referralModel.getCustomerId()) {
+            String sql = "SELECT id from referral WHERE customer_id = ? and appoint_id IS null";
+            List<Long> ids = jdbcTemplate.queryForList(sql, Long.class, referralModel.getCustomerId());
+            if (CollectionUtils.isNotEmpty(ids)) {
+                sql = "UPDATE referral SET status = -1 WHERE ID IN (" + StringUtils.join(ids, ",") + ");";
+                jdbcTemplate.update(sql);
+            }
+
+            sql= "UPDATE referral_relation SET status = 0 where doctor_id = ? and customer_id = ?";
+            jdbcTemplate.update(sql,referralModel.getDoctorId(),referralModel.getCustomerId());
+        }
+
         referralModel.setOperationTime(new Date());
         createSelective(referralModel);
         DoctorModel doctorModel = doctorService.findByPrimaryKey(referralModel.getDoctorId());
@@ -96,7 +113,15 @@ public class ReferralServiceImpl implements ReferralService {
         referralLogModel.setCreateTime(new Date());
         referralLogModel.setContent("已完成扫描" + doctorModel.getRealName() + "医生二维码");
         referralLogService.createSelective(referralLogModel);
-        //TODO
+
+        //绑定关系
+        if (null != referralModel.getCustomerId()) {
+           ReferralRelationModel  referralRelationModel = new ReferralRelationModel();
+            referralRelationModel.setCustomerId(referralModel.getCustomerId());
+            referralRelationModel.setDoctorId(referralModel.getDoctorId());
+            referralRelationModel.setStatus(1);
+            referralRelationService.createSelective(referralRelationModel);
+        }
 
     }
 
@@ -119,7 +144,7 @@ public class ReferralServiceImpl implements ReferralService {
     @Transactional
     @Override
     public void sendReport(List<Long> ids) {
-        for(Long id:ids){
+        for (Long id : ids) {
             ReferralModel referralModel = new ReferralModel();
             referralModel.setId(id);
             referralModel.setIsSend(1);
@@ -131,7 +156,7 @@ public class ReferralServiceImpl implements ReferralService {
     @Override
     public Page<Map<String, Object>> searchAppointPage(Map<String, String> param, Pageable pageable) {
         String select = "SELECT r.id,c.real_name as customerName,c.phone,d.real_name as doctorName," +
-                "r.status,r.type,r.num,r.operation_time as operationTime ";
+                "r.status,r.type,r.num,r.operation_time as operationTime,r.is_send AS isSend ";
 
         String tables = " from referral r\n" +
                 "  LEFT JOIN customer c on r.customer_id = c.id\n" +
@@ -158,11 +183,11 @@ public class ReferralServiceImpl implements ReferralService {
         }
 
         if (StringUtils.isNotEmpty(param.get("startDate"))) {
-            condition.append(" and r.num >= '" + param.get("startDate") + "'");
+            condition.append(" and r.operation_time >= '" + param.get("startDate") + "'");
         }
 
         if (StringUtils.isNotEmpty(param.get("endDate"))) {
-            condition.append(" and r.num <= '" + param.get("endDate") + "'");
+            condition.append(" and r.operation_time <= '" + param.get("endDate") + "'");
         }
 
 
@@ -178,6 +203,43 @@ public class ReferralServiceImpl implements ReferralService {
             condition.append(" and d.real_name LIKE '%" + param.get("doctorName") + "%'");
         }
 
+        if (null != pageable.getSort()) {
+            condition.append(" order by ");
+            List<String> sortStr = new ArrayList<>();
+            for (Sort.Order order : pageable.getSort()) {
+                sortStr.add(order.getProperty() + " " + order.getDirection());
+            }
+            condition.append(StringUtils.join(sortStr, ","));
+        }else {
+            condition.append(" order by r.operation_time desc");
+        }
+
+        StringBuffer limitSql = new StringBuffer();
+
+        if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
+            limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
+        }
+
+
+        List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables + condition.toString() + limitSql.toString());
+        Long count = jdbcTemplate.queryForObject("select count(*) " + tables + condition.toString(), Long.class);
+
+        Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
+
+        return page;
+    }
+
+    @Override
+    public Page<Map<String, Object>> selectReferralingPage(Long doctorId,List<Integer> statuses,String startDate,String endDate, Pageable pageable) {
+        String select = "SELECT r.id,r.operation_time as operationTime,r.status,r.customer_id as customerId,r.doctor_id as doctorId," +
+                "c.real_name as customerName, c.icon ";
+
+        String tables = " FROM referral r,customer c where r.customer_id=c.id  AND r.doctor_id = "+doctorId;
+
+        StringBuffer condition = new StringBuffer();
+        condition.append(" and r.status in ("+StringUtils.join(statuses,",")+")");
+        condition.append(" and r.operation_time <= '"+endDate+"'");
+        condition.append(" and r.operation_time >= '"+startDate+"'");
 
 
         StringBuffer limitSql = new StringBuffer();
@@ -193,6 +255,85 @@ public class ReferralServiceImpl implements ReferralService {
         Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
 
         return page;
+    }
+
+    @Override
+    public Map<String, Object> selectReferraledPage(Long doctorId,List<Integer> statuses, String startDate,String endDate,Pageable pageable) {
+        String select = "SELECT r.id,r.operation_time as operationTime,r.bill_id AS billId,r.status,r.customer_id as customerId,r.doctor_id as doctorId,c.real_name as customerName, c.icon ";
+
+        String tables = " FROM referral r,customer c where r.customer_id=c.id AND r.doctor_id = "+doctorId;
+
+        StringBuffer condition = new StringBuffer();
+        condition.append(" and r.status in ("+StringUtils.join(statuses,",")+")");
+        condition.append(" and r.operation_time <= '"+endDate+"'");
+        condition.append(" and r.operation_time >= '"+startDate+"'");
+
+
+        StringBuffer limitSql = new StringBuffer();
+        limitSql.append(" order by r.operation_time desc");
+        if (pageable.getOffset() >= 0 && pageable.getPageSize() > 0) {
+            limitSql.append(" limit " + pageable.getOffset() + "," + pageable.getPageSize());
+        }
+
+
+        List<Map<String, Object>> content = jdbcTemplate.queryForList(select + tables + condition.toString() + limitSql.toString());
+
+        if(CollectionUtils.isNotEmpty(content)){
+            List<Long> billIds = content.stream().map(e->Long.parseLong(e.get("billId").toString())).collect(Collectors.toList());
+            String billSql = "SELECT id,actual_cost as actualCost\n" +
+                    "FROM bill where id in  ("+StringUtils.join(billIds,",")+")";
+            List<BillModel> billModels = jdbcTemplate.query(billSql,new BeanPropertyRowMapper<>(BillModel.class));
+            Map<Long,BigDecimal> map = billModels.stream().collect(Collectors.toMap(BillModel::getId,BillModel::getActualCost));
+            content.stream().forEach(e->{
+                Long billId = Long.parseLong(e.get("billId").toString());
+                e.put("money",map.get(billId));
+            });
+        }
+
+        //总金额
+        StringBuffer totalSql = new StringBuffer();
+        totalSql.append("SELECT sum(b.actual_cost) from referral r ,bill b WHERE r.bill_id=b.id AND r.doctor_id = "+doctorId);
+        totalSql.append(" and r.status in ("+StringUtils.join(statuses,",")+")");
+        totalSql.append(" and r.operation_time <= '"+endDate+"'");
+        totalSql.append(" and r.operation_time >= '"+startDate+"'");
+        BigDecimal totalMoney = jdbcTemplate.queryForObject(totalSql.toString(),BigDecimal.class);
+        Map<String,Object> data = new HashMap<>();
+
+
+
+
+        Long count = jdbcTemplate.queryForObject("select count(*) " + tables + condition.toString(), Long.class);
+
+        Page<Map<String, Object>> page = new PageImpl<>(content, pageable, count);
+        data.put("page",page);
+        data.put("totalMoney",totalMoney);
+        return data;
+    }
+
+    @Transactional
+    @Override
+    public void bindCustomerAfterRegister(Long id, Long customerId,String message) {
+
+        //绑定转诊信息
+        ReferralModel referralParam = new ReferralModel();
+        referralParam.setId(id);
+        referralParam.setCustomerId(customerId);
+        referralParam.setStatus(2);
+        updateByPrimaryKeySelective(referralParam);
+
+        //添加关系
+        ReferralModel referralModel = findByPrimaryKey(id);
+        ReferralRelationModel referralRelationModel = new ReferralRelationModel();
+        referralRelationModel.setCustomerId(customerId);
+        referralRelationModel.setDoctorId(referralModel.getDoctorId());
+        referralRelationService.createSelective(referralRelationModel);
+
+        //添加日志
+        ReferralLogModel referralLogModel = new ReferralLogModel();
+        referralLogModel.setReferralId(referralModel.getId());
+        referralLogModel.setCreateTime(new Date());
+        referralLogModel.setContent(message);
+        referralLogService.createSelective(referralLogModel);
     }
 
     @Transactional

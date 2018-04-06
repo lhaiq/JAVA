@@ -8,9 +8,11 @@
     <result column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="rank" jdbcType="INTEGER" property="rank" />
     <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="key" jdbcType="VARCHAR" property="key" />
+    <result column="controller" jdbcType="VARCHAR" property="controller" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, name, url, parent_id, rank, icon
+    id, name, url, parent_id, rank, icon, `key`, controller
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -24,11 +26,11 @@
   </delete>
   <insert id="insert" parameterType="com.hengsu.bhyy.core.entity.SysMenu">
     insert into sys_menu (id, name, url, 
-      parent_id, rank, icon
-      )
+      parent_id, rank, icon, 
+      key, controller)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
-      #{parentId,jdbcType=BIGINT}, #{rank,jdbcType=INTEGER}, #{icon,jdbcType=VARCHAR}
-      )
+      #{parentId,jdbcType=BIGINT}, #{rank,jdbcType=INTEGER}, #{icon,jdbcType=VARCHAR}, 
+      #{key,jdbcType=VARCHAR}, #{controller,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.hengsu.bhyy.core.entity.SysMenu">
     insert into sys_menu
@@ -51,6 +53,12 @@
       <if test="icon != null">
         icon,
       </if>
+      <if test="key != null">
+        key,
+      </if>
+      <if test="controller != null">
+        controller,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -70,6 +78,12 @@
       </if>
       <if test="icon != null">
         #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null">
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="controller != null">
+        #{controller,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -91,6 +105,12 @@
       <if test="icon != null">
         icon = #{icon,jdbcType=VARCHAR},
       </if>
+      <if test="key != null">
+        key = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="controller != null">
+        controller = #{controller,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -100,7 +120,9 @@
       url = #{url,jdbcType=VARCHAR},
       parent_id = #{parentId,jdbcType=BIGINT},
       rank = #{rank,jdbcType=INTEGER},
-      icon = #{icon,jdbcType=VARCHAR}
+      icon = #{icon,jdbcType=VARCHAR},
+      key = #{key,jdbcType=VARCHAR},
+      controller = #{controller,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
   <select id="selectCount" parameterType="com.hengsu.bhyy.core.entity.SysMenu" resultType="java.lang.Integer">
@@ -123,6 +145,12 @@
       </if>
       <if test="icon != null">
         and icon = #{icon,jdbcType=VARCHAR}
+      </if>
+      <if test="key != null">
+        and key = #{key,jdbcType=VARCHAR}
+      </if>
+      <if test="controller != null">
+        and controller = #{controller,jdbcType=VARCHAR}
       </if>
     </where>
   </select>
@@ -147,6 +175,12 @@
     </if>
     <if test="param1.icon != null">
       and icon = #{param1.icon,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.key != null">
+      and key = #{param1.key,jdbcType=VARCHAR}
+    </if>
+    <if test="param1.controller != null">
+      and controller = #{param1.controller,jdbcType=VARCHAR}
     </if>
     <if test="param2.sort != null">
       order by 

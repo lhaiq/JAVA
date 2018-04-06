@@ -37,5 +37,11 @@ public interface ReferralService {
 
     Page<Map<String, Object>> searchAppointPage(Map<String, String> param, Pageable pageable);
 
+    Page<Map<String, Object>> selectReferralingPage(Long doctorId,List<Integer> statuses,String startDate,String endDate, Pageable pageable);
+
+    Map<String, Object> selectReferraledPage(Long doctorId,List<Integer> statuses,String startDate,String endDate, Pageable pageable);
+
+    void bindCustomerAfterRegister(Long id,Long customerId,String message);
+
 
 }

@@ -2,26 +2,40 @@
 package com.hengsu.bhyy.core.service;
 
 import com.hengsu.bhyy.core.model.CaseReportModel;
+
 import java.util.Date;
+
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
+import java.util.Map;
 
-public interface CaseReportService{
+public interface CaseReportService {
 
-public int create(CaseReportModel caseReportModel);
+    int create(CaseReportModel caseReportModel);
 
-public int createSelective(CaseReportModel caseReportModel);
+    int createSelective(CaseReportModel caseReportModel);
 
-public CaseReportModel findByPrimaryKey(Long id);
+    CaseReportModel findByPrimaryKey(Long id);
 
-public int updateByPrimaryKey(CaseReportModel caseReportModel);
+    int updateByPrimaryKey(CaseReportModel caseReportModel);
 
-public int updateByPrimaryKeySelective(CaseReportModel caseReportModel);
+    int updateByPrimaryKeySelective(CaseReportModel caseReportModel);
 
-public int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(Long id);
 
-public long selectCount(CaseReportModel caseReportModel);
+    long selectCount(CaseReportModel caseReportModel);
 
-public List<CaseReportModel> selectPage(CaseReportModel caseReportModel, Pageable pageable);
+    List<CaseReportModel> selectPage(CaseReportModel caseReportModel, Pageable pageable);
+
+    Page<Map<String, Object>> primaryScreenSearch(Map<String, Object> param, Pageable pageable);
+
+    Page<Map<String, Object>> searchCaseReport(Map<String, Object> param, Pageable pageable);
+
+
+    Page<Map<String, Object>> searchDoctorCaseReport(Long doctorId, Map<String, Object> param, Pageable pageable);
+
+    Page<Map<String, Object>> searchCustomerCaseReport(Long customerId, Map<String, Object> param, Pageable pageable);
 
 }

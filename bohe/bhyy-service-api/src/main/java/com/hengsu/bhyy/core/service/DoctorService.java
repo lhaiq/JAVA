@@ -32,9 +32,11 @@ public interface DoctorService {
 
     Page<Map<String, Object>> searchPage(Map<String, Object> param, Pageable pageable);
 
-    Page<Map<String, Object>> searchPageForApp(List<Long> dayOfWeek,String name,String itemName, Pageable pageable);
+    Page<Map<String, Object>> searchPageForApp(List<Long> dayOfWeek,String name,String itemName,Integer isRecommend, Pageable pageable);
 
 
     void addBalance(Long id, Long billId,BigDecimal money);
+
+    Long scan(Long id);
 
 }
