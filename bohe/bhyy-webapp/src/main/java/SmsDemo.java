@@ -38,11 +38,11 @@ public class SmsDemo {
     //产品域名,开发者无需替换
     static final String domain = "dysmsapi.aliyuncs.com";
 
-    static final String accessKeyId = "LTAIO7l76srqEzV5";
-    static final String accessKeySecret = "ewxavoYKzUerOHs56pCkZwHMWvDx0L";
+    static final String accessKeyId = "";
+    static final String accessKeySecret = "";
 
-//    static final String accessKeyId = "LTAIbWvyuGLcbg2T";
-//    static final String accessKeySecret = "sqGCcYrxsI6efBrGs98ou6xxxsEsvl";
+//    static final String accessKeyId = "";
+//    static final String accessKeySecret = "";
 
     public static SendSmsResponse sendSms() throws ClientException {
 
